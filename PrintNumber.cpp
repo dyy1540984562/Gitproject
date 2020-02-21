@@ -17,7 +17,7 @@ int check(int n)
 int check_prime(int n)
 {
 	int result = 0;
-	if (n == 1 || n == 0) result = 1;
+	if (n == 3 || n == 2 || n == 1 || n == 0) result = 1;
 	else
 	{
 		for (int i = 2;i <= sqrt(n);i++)
