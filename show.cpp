@@ -5,7 +5,7 @@ using namespace cv;
 using namespace std;
 //#define byte uchar 
 
-//图像的显示与保存
+/************图像的显示与保存示例**********************/
 //imread 功能是加载图像文件成为一个 Mat 对象，其中第一个参数表示 图像文件名称 。第二个参数表示 读取图像的颜色类型（默认参数是1） ，返回3通道图像，支持常见的三个参数值：
 //IMREAD_UNCHANGED ：表示加载原图，不做任何改变
 //IMREAD_GRAYSCALE ：表示把原图作为灰度图像加载进来
@@ -31,8 +31,7 @@ using namespace std;
 //	return 0;
 //}
 
-
-//修改图片大小
+/************修改图片大小示例**********************/
 //int main()
 //{
 //	Mat srcImage = imread("C:\\opencv_picture_test\\test4.jpg");//打开原图
@@ -50,11 +49,7 @@ using namespace std;
 //	return 0;
 //}
 
-
-
-
-
-/****mat的基本操作**********/
+/****mat的基本操作示例**********/
 //int main()
 //{
 //	std::cout << "hello opencv!" << std::endl;
@@ -139,10 +134,7 @@ using namespace std;
 //
 //}
 
-
-
-
-//图像腐蚀
+/****图像腐蚀示例**********/
 //int main()
 //{
 //	//载入原图
@@ -166,5 +158,113 @@ using namespace std;
 //	return 0;
 //}
 
+/****图像模糊示例**********/
+//int main()
+//{
+//	//载入原图
+//	Mat secImage = imread("C:\\opencv_picture_test\\test1.jpg");
+//	if (secImage.empty())
+//	{
+//		printf("Could not find the image!\n");
+//		return -1;
+//	}
+//	//进行均值滤波操作
+//	Mat dstImage;
+//	blur(secImage, dstImage,Size(7,7));
+//	//显示效果图
+//	imshow("均值滤波【效果图】", dstImage);
+//
+//
+//	waitKey(0);
+//	return 0;
+//}
 
 
+/****canny算子检测示例**********/
+//int main()
+//{
+//	//载入原图
+//	Mat secImage = imread("C:\\opencv_picture_test\\test1.jpg");//加载原图
+//	if (secImage.empty())
+//	{
+//		printf("Could not find the image!\n");
+//		return -1;
+//	}
+//	Mat edge, dstImage;
+//	dstImage.create(secImage.size(), secImage.type());		//创建一个同大小类型的矩阵
+//	cvtColor(secImage, dstImage,COLOR_BGR2GRAY);
+//	imshow("【原图的灰度图】", dstImage);
+//	//进行均值滤波操作
+//	blur(dstImage, edge, Size(3, 3));
+//	//运行canny算子
+//	Canny(edge,edge,3,9,3);
+//	imshow("canny算子检测【效果图】", edge);
+//	waitKey(0);
+//	return 0;
+//}
+
+/****读取并播放视屏示例**********/
+//int main()
+//{
+//	//实例化的同时初始化
+//	VideoCapture capture("C:\\opencv_picture_test\\video1.avi");		//类似于 int a=1;
+//	//调用摄像头
+//	//VideoCapture capture(0);		//类似于 int a=1;
+//	/*
+//		先实例化
+//		VideoCapture capture;
+//		再初始化
+//		capture.open("C:\\opencv_picture_test\\video1.avi");
+//	*/
+//	//循环显示
+//	while (1)
+//	{
+//		Mat frame;	//存储每一帧的图像
+//		capture >> frame;	//读取当前帧
+//		imshow("读取视频",frame);	//显示当前帧
+//		waitKey(30);	//延时30ms
+//	}
+//	return 0;
+//}
+
+/****对视频进行处理示例**********/
+int main()
+{
+	//实例化的同时初始化
+	VideoCapture capture("C:\\opencv_picture_test\\video1.avi");		//类似于 int a=1;
+	//调用摄像头
+	//VideoCapture capture(0);		//类似于 int a=1;
+	/*
+		先实例化
+		VideoCapture capture;
+		再初始化
+		capture.open("C:\\opencv_picture_test\\video1.avi");
+	*/
+	Mat egdes;
+	//循环显示 canny
+	//while (1)
+	//{
+	//	Mat frame;	//存储每一帧的图像
+	//	capture >> frame;	//读取当前帧
+	//	imshow("原视频", frame);	//显示当前帧
+	//	cvtColor(frame, egdes, COLOR_BGR2GRAY);		//转化为灰度图
+	//	blur(egdes, egdes, Size(7, 7));				//降噪
+	//	Canny(egdes, egdes, 0, 30, 3);
+	//	imshow("处理后的视频", egdes);	//显示当前帧
+	//	if(waitKey(10) >= 0) break;	//延时10ms
+	//}
+	//循环显示 腐蚀
+	while (1)
+	{
+		Mat frame;	//存储每一帧的图像
+		capture >> frame;	//读取当前帧
+		imshow("原视频", frame);	//显示当前帧
+		//进行腐蚀操作
+		Mat element = getStructuringElement(MORPH_RECT, Size(15, 15));	//返回的是内核矩阵
+		Mat dstImage;
+		erode(frame, dstImage, element);					//腐蚀操作
+		imshow("处理后的视频", dstImage);	//显示当前帧
+		if(waitKey(10) >= 0) break;	//延时10ms
+	}
+	return 0;
+}
