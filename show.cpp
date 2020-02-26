@@ -5,11 +5,223 @@ using namespace cv;
 using namespace std;
 //#define byte uchar 
 //#define WINDOW_NAME "线性混合示例"
-#define WINDOW_NAME "程序窗口"
+//#define WINDOW_NAME "程序窗口"
+//#define WINDOW_WIDTH 600 
+
+/*****************************Core 模块***********************************/
+/****输出常见的数据结构与函数**********/
+//int main()
+//{
+//
+//	//Point_<int>、Point2i、Point 互相等价，Point_<float>、Point2f 互相等价。
+//	//Scalar( a, b，c)那么定义的RGB颜色值:红色分量为c，绿色分量为b，蓝色分量为a。
+//	//		  B  G  R
+//	//	Size(5，5);//构造出的 Size宽度和高度都为5，即xxx.width和xXx. height都为5
+//	//Rect rect = rectl & rect2; Rect rect = rect | rect2;
+//	// 取两个矩形的交集和并集
+//	//Rect rectShift = rect + point;		平移
+//	//Rect rectScale = rect + size;			缩放
+//	//cvtColor()函数：颜色空间转换函数 可以实现RGB颜色向HSV HSI等颜色空间的转换，也可以转化为灰度图像
+//	/*void cvtColor(InputArray src， OutputArray dst， int code, intdstCn = 0)
+//		第一个参数为输入图像，第二个参数为输出图像，第三个参数为颜色空间转
+//		换的标识符， 第四个参数为目标图像的通道数，若该参数是0,
+//		表示目标图像取源图像的通道数。下 面是一个调用示例 :
+//		COLOR GRAY2BGR	//转化为灰度
+//		*/
+//	Point2f p(6,2);
+//	Point3f w(1,1,1);
+//	cout << "【二维点】P" << p << ";\n" << endl;
+//	cout << "【三维点】w" << w << ";\n" << endl;
+//	vector<float> v;
+//	v.push_back(3);
+//	v.push_back(5);
+//	v.push_back(7);
+//	cout << " 【基于Mat的vector】 shortvec =" << Mat(v) << ";\n" << endl;
+//
+//	vector<Point2f> points(20);
+//	for (size_t i = 0;i < points.size();++i)
+//	{
+//		points[i] = Point2f((float)(i * 5), (float)(i % 7));
+//	}
+//	cout << " 【二维点向量】 points=" << points << ";\n" <<endl;
+//	waitKey(0);
+//	return -1;
+//}
+/****mat的基本操作示例**********/
+/*
+赋值和构造函数只复制信息头
+Mat A,C;	//仅创建信息头部分
+A =imread();	//为矩阵开辟内容
+Mat B(A);		//使用拷贝构造函数
+C=A;		//赋值语句
+所有Mat指向同一个数据矩阵
+Mat D(A,Rect(0,0,100,100) );//使用矩形界定
+Mat E(Range:all(),Range(1,3) );//使用行和列界定
+
+使用copyto或者clone可以复制整个矩阵
+Mat F =A.clone();
+Mat G;
+A.copyTo(G);
+
+创建多维度矩阵
+int sz[3] = {2,2,2};
+Mat L(3,sz，CV_ 8UC，Scalar::al1(0)) ;
+上面的例子演示了如何创建- -个超过两维的矩阵:指定维数，然后传递一-个
+指向一个数组的指针，这个数组包含每个维度的尺寸;后续的两个参数与方法一
+中的相同。
+M. create(4,4，CV_ 8UC(2)) ;
+cout << "M = "<< endl << " "<<M<<endl<<endl;
+
+*/
+//int main()
+//{
+//	std::cout << "hello opencv!" << std::endl;
+//	/*cv::Mat secImage = imread("D:\\opencv_picture_test\\test1.jpg");
+//	cv::imshow("secImage", secImage);
+//	waitKey(0);
+//	return 0;*/
+//	cv::Mat M1(2,2,CV_8UC3,Scalar(0,0,255));	//Mat 尺寸为2,2类型：8为uchar类型，Mat通道数为3，分别为0 0 255	通常用CV_8UC3来描述RGB图像
+//	std::cout << "M1_1st" << std::endl;
+//	std::cout << M1 << std::endl;
+//	//CV_ [位数][带符号与否][类型前缀]C[通道数]
+//	cv::Mat M2(2, 2, CV_8UC3,1);	//Mat 尺寸为2,2类型：8为uchar类型，Mat通道数为3，分别为1 0 0 只对第一个元素进行赋值
+//	std::cout << "M1_1st" << std::endl;
+//	std::cout << M2 << std::endl;
+//	int height = M2.rows;
+//	int width = M2.cols;
+//	std::cout << "size :"  << height << "," << width<< std::endl;
+//
+//	/*****深复制与浅复制*******/
+//	cv::Mat M3;
+//	M3.create(3,4,CV_8UC3);				//也是一种赋值语句
+//
+//	cv::Mat M4;
+//	cv::Mat M5;
+//	M4 = M3;	//M4是M3的浅复制他们指向的是同一块内存区域，相当于对同一个区域的两个不同名称。所以当M3变化时M4的值也变了
+//	M3.copyTo(M5);//M5是M3的深复制，占用的是另外一个区域，他的值相当于代码运行这一行时的M3的值且不会因为M3的值改变而改变
+//
+//	randu(M3, Scalar(0), Scalar(255));		
+//	std::cout << "M3_1st" << std::endl;
+//	std::cout << M3 << std::endl;
+//	std::cout << "M4_1st" << std::endl;
+//	std::cout << M4 << std::endl;
+//	std::cout << "M5_1st" << std::endl;
+//	std::cout << M5 << std::endl;
+//
+//	/******遍历Mat*************/
+//	//1、利用指针
+//	//cv::Mat M6;
+//	//cv::Mat M7;
+//	//M6.create(3, 4, CV_8UC1);
+//	//M7.create(3, 4, CV_8UC3);
+//	////1个通道的
+//	//for (int j = 0;j <= M6.rows;j++)
+//	//{
+//	//	uchar* data = M6.ptr<uchar>(j);
+//	//	for (int i = 0;i < M6.cols;i++)
+//	//	{
+//	//		data[i] = j;
+//	//	}
+//	//
+//	//}
+//	////3个通道的
+//	//for (int j = 0;j <= M7.rows;j++)
+//	//{
+//	//	
+//	//	for (int i = 0;i < M7.cols;i++)
+//	//	{
+//	//		M7.at<Vec3b>(j, i)[0] = j;
+//	//		M7.at<Vec3b>(j, i)[1] = j+1;
+//	//		M7.at<Vec3b>(j, i)[2] = j+2;
+//	//	}
+//
+//	//}
+//	//std::cout << "M6" << std::endl;
+//	//std::cout << M6 << std::endl;
+//	//std::cout << "M7" << std::endl;
+//	//std::cout << M7 << std::endl;
+//	//显示像素值
+//	//cv::Mat M6;
+//	//M6.create(3, 4, CV_8UC1);				//也是一种赋值语句
+//	//randu(M6, Scalar(0), Scalar(255));
+//	//std::cout << "M6_1st" << std::endl;
+//	//std::cout << M6 << std::endl;
+//	//int value1 = M6.at<Vec3b>(2,1)[0];
+//	//int value2= M6.at<uchar>(2,1);
+//	//int value3 = M6.at<uchar>(0,2);
+//	//std::cout << "value1  " << value1 <<std::endl;
+//	//std::cout << "value2  "<< value2 <<std::endl;
+//	//std::cout << "value3  " << value3 << std::endl;
+//	waitKey(0);
+//	return 0;
+//
+//}
 
 
-/******************************************鼠标操作****************************************************************************/
+/****其他**********/
+//Matx是个轻量级的Mat, 必须在使用前规定好大小，比如一一个2 * 3的float
+//型的Matx，可以声明为Matx23f。
+//Vec是Matx的 - 一个派生类, 是一个--维的Matx, 跟vector很相似。在OpenCV
+//源码中有如下定义。
+//template<typename_ Tp, int n> class Vec : public Matx<_ _Tp, n, 1> { ... };
+//typedef Vec<uchar, 2> Vec2b;
+//Range类其实就是为了使OpenCV的使用更像MATLAB而产生的。比如
+//Range : all()其实就是MATLAB里的符号。而Range(a, b)其实就是MATLAB
+//中的a : b, 注意这里的a和b都应为整型。.
+//OpenCV中防止内存溢出的函数有alignPtr、 alignSize、 allocate、 deallocate、
+//fastMalloc、 fastFree 等。
+//<math.h>.里的一 些函数使用起来很方便，有计算向量角度的函数fastAtan2、
+//计算立方根的函数cubeRoot、向上取整函数cvCeil、向下取整函数cvFloor、
+//四舍五入函数cvRound等。还有一 - 些类似MATLAB里面的函数, 比如cvIsInf
+//判断自变量是否无穷大，cvIsNaN判断自变量是否不是 - -个数。
+//显示文字相关的函数有getTextSize、cvInitFont、 putText。
+//作图相关的函数有circle、 clipLine、 ellipse、 ellipse2Poly、 line、 rectangle、
+//polylines、 类LineIterator.
+//填充相关的函数有fllConvexPoly、 fllPoly。
+//OpenCV中RNG(函数的作用为初始化随机数状态的生成器。
 
+/*********************************基本图形绘制先跳过*******************************/
+/*********************************************************************************/
+
+/******************************颜色空间缩减*******************************************/
+//颜色空间缩减：将现有的颜色空间值除以某个输入值，以获得较少的颜色数，比如：颜色值0-9->0,10-19->10，以此类推
+//公式：I_new = (I_old/10)*10;	//利用int类型向下取整的特点
+//可以将256种计算结果存入表table中
+/*
+int divdeWith = 10;
+uchar table[256];
+for(int i=0;i<256;++i)
+{
+	table[i]= divdeWith * (i/divdeWith);		//table[i]存放的是值为i的像素缩小颜色空间的结果
+}
+p[j]=table[p[j]];
+算法步骤：
+1、遍历图像矩阵的每一个像素
+2、对像素应用上述公式
+*/
+
+/******************************LUT：Look up table 操作*******************************************/
+/*
+Mat lookUpTable(1,256,CV_8U);
+uchar *p =lookUpTable.data;
+for(int i =0;i<256 ;++i) p[i]=table[i];
+//I输入 J输出
+for(int i=0;i<times;++i) LUT(I,lookUpTable,J);
+*/
+/*****************************计时函数*******************************************/
+/*
+double time0 = static_cast<double>(getTickCount());	//记录起始时间
+//一系列处理之后
+time0 = ((double)getTickCount()-time0)/getTickFrequency();
+cout << "此方法运行时间为：" << time0 << "秒" <<endl;	//输出运行时间
+*/
+
+/****************************************************************/
+
+
+
+
+/******************************************鼠标操作画矩形****************************************************************************/
 ////------------------------------------【声明全局函数】--------------------------------------------------------------
 //void on_MouseHandle(int event, int x, int y, int flags, void* param);
 //void DrawRectangle(cv::Mat img,cv::Rect box);
@@ -94,9 +306,6 @@ using namespace std;
 //	rectangle(img,box.tl(),box.br(),Scalar(g_rng.uniform(0,255),g_rng.uniform(0,255), g_rng.uniform(0, 255)));	//随机颜色
 //}
 /**********************************************************************************************************************/
-
-
-
 
 
 /*************利用轨迹条控制两幅图片的alpha混合******************/
@@ -220,110 +429,25 @@ Mat roi = img(Range(250, 250 +xleng), Range(200, 200 + yleng));
 //}
 
 
-
 /************修改图片大小示例**********************/
-//int main()
-//{
-//	Mat srcImage = imread("D:\\opencv_picture_test\\test4.jpg");//打开原图
-//	Mat dstImage;          //目标图
-//	imshow("未矫正过的图像", srcImage);//显示未矫正的原图
-//	//resize(srcImage, dstImage, Size(), 0.5, 0.5);//由于指定缩放的比例，Size()直接给，后面就分别是x、y方向的缩放比例
-//	resize(srcImage, dstImage, Size(64, 128)); //对图片进行修改
-//	imshow("矫正后的图像", dstImage);
-//	//进行腐蚀操作
-//	Mat element = getStructuringElement(MORPH_RECT, Size(15, 15));	//返回的是内核矩阵
-//	Mat erode_dstImage;
-//	erode(dstImage, erode_dstImage, element);					//腐蚀操作
-//	//显示效果图
-//	imshow("【矫正后的图像的效果图】", erode_dstImage);
-//	waitKey(0);
-//	return 0;
-//}
+int main()
+{
+	Mat srcImage = imread("D:\\opencv_picture_test\\test4.jpg");//打开原图
+	Mat dstImage;          //目标图
+	imshow("未矫正过的图像", srcImage);//显示未矫正的原图
+	resize(srcImage, dstImage, Size(), 0.5, 0.5);//由于指定缩放的比例，Size()直接给，后面就分别是x、y方向的缩放比例
+	resize(srcImage, dstImage, Size(64, 128)); //对图片进行修改
+	imshow("矫正后的图像", dstImage);
+	//进行腐蚀操作
+	Mat element = getStructuringElement(MORPH_RECT, Size(15, 15));	//返回的是内核矩阵
+	Mat erode_dstImage;
+	erode(dstImage, erode_dstImage, element);					//腐蚀操作
+	//显示效果图
+	imshow("【矫正后的图像的效果图】", erode_dstImage);
+	waitKey(0);
+	return 0;
+}
 
-/****mat的基本操作示例**********/
-//int main()
-//{
-//	std::cout << "hello opencv!" << std::endl;
-//	/*cv::Mat secImage = imread("D:\\opencv_picture_test\\test1.jpg");
-//	cv::imshow("secImage", secImage);
-//	waitKey(0);
-//	return 0;*/
-//	cv::Mat M1(2,2,CV_8UC3,Scalar(0,0,255));	//Mat 尺寸为2,2类型：8为uchar类型，Mat通道数为3，分别为0 0 255	通常用CV_8UC3来描述RGB图像
-//	std::cout << "M1_1st" << std::endl;
-//	std::cout << M1 << std::endl;
-//
-//	cv::Mat M2(2, 2, CV_8UC3,1);	//Mat 尺寸为2,2类型：8为uchar类型，Mat通道数为3，分别为1 0 0 只对第一个元素进行赋值
-//	std::cout << "M1_1st" << std::endl;
-//	std::cout << M2 << std::endl;
-//	int height = M2.rows;
-//	int width = M2.cols;
-//	std::cout << "size :"  << height << "," << width<< std::endl;
-//
-//	/*****深复制与浅复制*******/
-//	cv::Mat M3;
-//	M3.create(3,4,CV_8UC3);				//也是一种赋值语句
-//
-//	cv::Mat M4;
-//	cv::Mat M5;
-//	M4 = M3;	//M4是M3的浅复制他们指向的是同一块内存区域，相当于对同一个区域的两个不同名称。所以当M3变化时M4的值也变了
-//	M3.copyTo(M5);//M5是M3的深复制，占用的是另外一个区域，他的值相当于代码运行这一行时的M3的值且不会因为M3的值改变而改变
-//
-//	randu(M3, Scalar(0), Scalar(255));		
-//	std::cout << "M3_1st" << std::endl;
-//	std::cout << M3 << std::endl;
-//	std::cout << "M4_1st" << std::endl;
-//	std::cout << M4 << std::endl;
-//	std::cout << "M5_1st" << std::endl;
-//	std::cout << M5 << std::endl;
-//
-//	/******遍历Mat*************/
-//	//1、利用指针
-//	//cv::Mat M6;
-//	//cv::Mat M7;
-//	//M6.create(3, 4, CV_8UC1);
-//	//M7.create(3, 4, CV_8UC3);
-//	////1个通道的
-//	//for (int j = 0;j <= M6.rows;j++)
-//	//{
-//	//	uchar* data = M6.ptr<uchar>(j);
-//	//	for (int i = 0;i < M6.cols;i++)
-//	//	{
-//	//		data[i] = j;
-//	//	}
-//	//
-//	//}
-//	////3个通道的
-//	//for (int j = 0;j <= M7.rows;j++)
-//	//{
-//	//	
-//	//	for (int i = 0;i < M7.cols;i++)
-//	//	{
-//	//		M7.at<Vec3b>(j, i)[0] = j;
-//	//		M7.at<Vec3b>(j, i)[1] = j+1;
-//	//		M7.at<Vec3b>(j, i)[2] = j+2;
-//	//	}
-//
-//	//}
-//	//std::cout << "M6" << std::endl;
-//	//std::cout << M6 << std::endl;
-//	//std::cout << "M7" << std::endl;
-//	//std::cout << M7 << std::endl;
-//	//显示像素值
-//	//cv::Mat M6;
-//	//M6.create(3, 4, CV_8UC1);				//也是一种赋值语句
-//	//randu(M6, Scalar(0), Scalar(255));
-//	//std::cout << "M6_1st" << std::endl;
-//	//std::cout << M6 << std::endl;
-//	//int value1 = M6.at<Vec3b>(2,1)[0];
-//	//int value2= M6.at<uchar>(2,1);
-//	//int value3 = M6.at<uchar>(0,2);
-//	//std::cout << "value1  " << value1 <<std::endl;
-//	//std::cout << "value2  "<< value2 <<std::endl;
-//	//std::cout << "value3  " << value3 << std::endl;
-//	waitKey(0);
-//	return 0;
-//
-//}
 
 /****图像腐蚀示例**********/
 //int main()
