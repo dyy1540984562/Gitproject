@@ -432,48 +432,48 @@ Mat roi = img(Range(250, 250 +xleng), Range(200, 200 + yleng));
 
 
 /************修改图片大小示例**********************/
-int main()
-{
-	Mat srcImage = imread("D:\\opencv_picture_test\\test4.jpg");//打开原图
-	Mat dstImage;          //目标图
-	imshow("未矫正过的图像", srcImage);//显示未矫正的原图
-	resize(srcImage, dstImage, Size(), 0.5, 0.5);//由于指定缩放的比例，Size()直接给，后面就分别是x、y方向的缩放比例
-	resize(srcImage, dstImage, Size(64, 128)); //对图片进行修改
-	imshow("矫正后的图像", dstImage);
-	//进行腐蚀操作
-	Mat element = getStructuringElement(MORPH_RECT, Size(15, 15));	//返回的是内核矩阵
-	Mat erode_dstImage;
-	erode(dstImage, erode_dstImage, element);					//腐蚀操作
-	//显示效果图
-	imshow("【矫正后的图像的效果图】", erode_dstImage);
-	waitKey(0);
-	return 0;
-}
-
-
-/****图像腐蚀示例**********/
 //int main()
 //{
-//	//载入原图
-//	Mat img = imread("D:\\opencv_picture_test\\test1.jpg");
-//	if (img.empty())
-//	{
-//		printf("Could not find the image!\n");
-//		return -1;
-//	}
-//	//显示原图
-//	imshow("【原图】", img);
+//	Mat srcImage = imread("D:\\opencv_picture_test\\test4.jpg");//打开原图
+//	Mat dstImage;          //目标图
+//	imshow("未矫正过的图像", srcImage);//显示未矫正的原图
+//	resize(srcImage, dstImage, Size(), 0.5, 0.5);//由于指定缩放的比例，Size()直接给，后面就分别是x、y方向的缩放比例
+//	resize(srcImage, dstImage, Size(64, 128)); //对图片进行修改
+//	imshow("矫正后的图像", dstImage);
 //	//进行腐蚀操作
-//	Mat element = getStructuringElement(MORPH_RECT,Size(15,15));	//返回的是内核矩阵
-//	Mat dstImage;
-//	erode(img, dstImage, element);					//腐蚀操作
+//	Mat element = getStructuringElement(MORPH_RECT, Size(15, 15));	//返回的是内核矩阵
+//	Mat erode_dstImage;
+//	erode(dstImage, erode_dstImage, element);					//腐蚀操作
 //	//显示效果图
-//	imshow("【效果图】", dstImage);
-//
-//
+//	imshow("【矫正后的图像的效果图】", erode_dstImage);
 //	waitKey(0);
 //	return 0;
 //}
+
+
+/****图像腐蚀示例**********/
+int main()
+{
+	//载入原图
+	Mat img = imread("D:\\opencv_picture_test\\test1.jpg");
+	if (img.empty())
+	{
+		printf("Could not find the image!\n");
+		return -1;
+	}
+	//显示原图
+	imshow("【原图】", img);
+	//进行腐蚀操作
+	Mat element = getStructuringElement(MORPH_RECT,Size(15,15));	//返回的是内核矩阵
+	Mat dstImage;
+	erode(img, dstImage, element);					//腐蚀操作
+	//显示效果图
+	imshow("【效果图】", dstImage);
+
+
+	waitKey(0);
+	return 0;
+}
 
 /****图像模糊示例**********/
 //int main()
