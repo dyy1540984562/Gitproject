@@ -210,7 +210,7 @@ for(int i =0;i<256 ;++i) p[i]=table[i];
 //I输入 J输出
 for(int i=0;i<times;++i) LUT(I,lookUpTable,J);
 */
-/*****************************计时函数*******************************************/
+/*****************************计时函数***********可以用来查看算法运行时间********************************/
 /*
 double time0 = static_cast<double>(getTickCount());	//记录起始时间
 //一系列处理之后
@@ -218,8 +218,113 @@ time0 = ((double)getTickCount()-time0)/getTickFrequency();
 cout << "此方法运行时间为：" << time0 << "秒" <<endl;	//输出运行时间
 */
 
-/****************************************************************/
+/*
+访问像素的三种方法：
+1、指针访问：C操作符[];
+2、迭代器 ：iterator
+3、动态地址计算
+*/
 
+//-----------------------------------------------颜色缩减函数------------------------------------------------
+void colorReduce(Mat& inputImage,Mat& outputImage,int div,int type);
+
+//-----------------------------------------------主函数------------------------------------------------
+int main()
+{
+	Mat srcImage = imread("D:\\opencv_picture_test\\miku2.jpg", 2 | 4);
+	namedWindow("原始图", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
+	imshow("原始图", srcImage);
+
+	Mat dstImage;
+	dstImage.create(srcImage.rows, srcImage.cols, srcImage.type());	//大小类型和原图一样
+
+	double time0 = static_cast<double>(getTickCount());	//记录起始时间
+	//颜色缩减
+	colorReduce(srcImage, dstImage,128,3);
+
+	//一系列处理之后
+	time0 = ((double)getTickCount() - time0) / getTickFrequency();
+	cout << "此方法运行时间为：" << time0 << "秒" << endl;	//输出运行时间
+	namedWindow("效果图", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
+	imshow("效果图", dstImage);
+	imwrite("D:\\opencv_picture_test\\miku5.jpg", dstImage);
+
+	waitKey(0);
+	return 0;
+
+}
+//-----------------------------------------------colorReduce()函数------------------------------------------------
+void colorReduce(Mat& inputImage, Mat& outputImage, int div, int type)
+{
+	//描述：使用指针访问 ，很好理解，和C类似
+	if (type == 1)
+	{
+		outputImage = inputImage.clone();		//因为我们需要进行处理时不对原图像产生影响，所以这里使用深复制
+		int row_num = outputImage.rows;			//行数
+		int col_num = outputImage.cols * outputImage.channels();			//列数*通道数 = 每一行元素的个数   灰度图通道数为1，彩色的为3
+		//双重循环，遍历所有像素值
+		for (int i = 0;i < row_num;i++)	//行循环
+		{
+			uchar* data = outputImage.ptr<uchar>(i);		//获取第i行的首地址
+			for (int j = 0;j < col_num;j++)	//列循环
+			{
+				data[j] = data[j] / div * div;	//颜色缩减，也可以是其他的一些处理
+			}
+		}
+	}
+	//描述：使用迭代器访问
+	/*
+	我们仅仅需要获得图像矩阵的begin和end，然后增加迭代直至begin到end。将*操作符添加在迭代指针前，即可访问当前指向的内容，
+	相比用指针直接访问可能出现的越界问题，迭代器绝对是非常安全的
+	*/
+	else if (type == 2)
+	{
+		outputImage = inputImage.clone();		//因为我们需要进行处理时不对原图像产生影响，所以这里使用深复制
+		//获取迭代器
+		Mat_<Vec3b>::iterator it = outputImage.begin<Vec3b>();		//初始位置的迭代器
+		Mat_<Vec3b>::iterator itend = outputImage.end<Vec3b>();		//初始位置的迭代器
+
+		//存取彩色图像像素
+		for (;it != itend;++it)
+		{
+			//-------【开始处理每个像素】---------------
+			(*it)[0] = (*it)[0] / div * div;
+			(*it)[1] = (*it)[1] / div * div;
+			(*it)[2] = (*it)[2] / div * div;
+			//-------【处理结束】---------------
+		}
+
+	}
+	//描述：使用动态地址运算配合at访问
+	else
+	{
+		outputImage = inputImage.clone();		//因为我们需要进行处理时不对原图像产生影响，所以这里使用深复制
+		int row_num = outputImage.rows;			//行数
+		int col_num = outputImage.cols ;			//列数
+		//双重循环，遍历所有像素值
+		for (int i = 0;i < row_num;i++)	//行循环
+		{	
+			for (int j = 0;j < col_num;j++)	//列循环
+			{
+				//-------【开始处理每个像素】---------------
+				outputImage.at<Vec3b>(i, j)[0] = outputImage.at<Vec3b>(i, j)[0] / div * div;		//B通道
+				outputImage.at<Vec3b>(i, j)[1] = outputImage.at<Vec3b>(i, j)[1] / div * div;		//G通道
+				outputImage.at<Vec3b>(i, j)[2] = outputImage.at<Vec3b>(i, j)[2] / div * div;		//R通道
+				//-------【处理结束】---------------
+			}
+		}
+		/*
+		讲解：成员函数at(int y,int x)可以用来存取图像元素，但在编译时需要知道图像的数据类型，at方法本身不会对任何数据类型进行转化，十分重要！！！
+		存取彩色图像的代码可以写成如下形式：
+		image.at<Vec3b>(j,i)[channel] =value;
+		opencv彩色图像的顺序存储是按照BGR不是RGB！！！！
+		*/		
+	}
+}
+
+
+
+/****************************************************************/
 
 
 
@@ -452,28 +557,28 @@ Mat roi = img(Range(250, 250 +xleng), Range(200, 200 + yleng));
 
 
 /****图像腐蚀示例**********/
-int main()
-{
-	//载入原图
-	Mat img = imread("D:\\opencv_picture_test\\test1.jpg");
-	if (img.empty())
-	{
-		printf("Could not find the image!\n");
-		return -1;
-	}
-	//显示原图
-	imshow("【原图】", img);
-	//进行腐蚀操作
-	Mat element = getStructuringElement(MORPH_RECT,Size(15,15));	//返回的是内核矩阵
-	Mat dstImage;
-	erode(img, dstImage, element);					//腐蚀操作
-	//显示效果图
-	imshow("【效果图】", dstImage);
-
-
-	waitKey(0);
-	return 0;
-}
+//int main()
+//{
+//	//载入原图
+//	Mat img = imread("D:\\opencv_picture_test\\test1.jpg");
+//	if (img.empty())
+//	{
+//		printf("Could not find the image!\n");
+//		return -1;
+//	}
+//	//显示原图
+//	imshow("【原图】", img);
+//	//进行腐蚀操作
+//	Mat element = getStructuringElement(MORPH_RECT,Size(15,15));	//返回的是内核矩阵
+//	Mat dstImage;
+//	erode(img, dstImage, element);					//腐蚀操作
+//	//显示效果图
+//	imshow("【效果图】", dstImage);
+//
+//
+//	waitKey(0);
+//	return 0;
+//}
 
 /****图像模糊示例**********/
 //int main()
