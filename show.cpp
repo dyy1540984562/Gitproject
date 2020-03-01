@@ -315,6 +315,9 @@ double compareHist(Inputarray H1,Inputarray H2, int method);
 3、直方图相交 Intersection        method = CV_COMP_INTERSECT			sum of (min(H1(i),H2(i)))
 4、Bhattacharyya 距离(巴氏距离)   method = CV_COMP_BHATTACHARYYA     
 */
+
+
+
 /*--------------------二维直方图计算及绘制函数-------------------*/
 //描述 输入 ：要处理的图  type1:转化到不同类型的二维直方图   type2： 绘制直方图 还是 仅计算归一化直方图
 Mat	My_Rraw_histogram_2D(Mat* srcImage,int type1,int type2)		//输入:要处理的图   输出：该图像的二维直方图
