@@ -6,172 +6,9 @@ using namespace std;
 #define byte uchar 
 #define TYEPE_GRAY 0
 #define TYEPE_RGB 1
-//--------------------------------------------------------------课堂练习部分-----------------------------------------------------------
-/************练习1**********************/
-//imread 功能是加载图像文件成为一个 Mat 对象，其中第一个参数表示 图像文件名称 。第二个参数表示 读取图像的颜色类型（默认参数是1） ，返回3通道图像，支持常见的三个参数值：
-//int main()
-//{
-//	Mat img1 = imread("D:\\opencv_picture_test\\miku2.jpg", 2 | 4);		//无损原图像
-//	if (img1.empty())
-//	{
-//		printf("Could not find the image!\n");
-//		return -1;
-//	}
-//	imshow("无损原图", img1);
-//	int height = img1.rows;	//行数/高
-//	int width = img1.cols;	//列数/宽
-//	
-//	for (int j = 0;j < height;j++)
-//	{
-//		for (int i = 0;i < width;i++)
-//		{
-//			//描述：使用动态地址运算配合at访问,可读性强
-//			//--------------------开始像素处理-------------------
-//			byte ave = (img1.at<Vec3b>(j,i)[0]+ img1.at<Vec3b>(j, i)[1] + img1.at<Vec3b>(j, i)[2])/3;		//计算平均值
-//			img1.at<Vec3b>(j, i)[0] = ave;
-//			img1.at<Vec3b>(j, i)[1] = ave;
-//			img1.at<Vec3b>(j, i)[2] = ave;
-//			//-------------------像素处理结束--------------------
-//		}
-//	}
-//	imshow("处理后的图像", img1);
-//    //imwrite("D:\\opencv_picture_test\\test1.jpg", img1);//保存图片
-//	waitKey(0);
-//	return 0;
-//}
-
-/************练习2**********************/
-//int main()
-//{
-//	Mat img1 = imread("D:\\opencv_picture_test\\miku2.jpg", 0);			//灰度图
-//	if (img1.empty())
-//	{
-//		printf("Could not find the image!\n");
-//		return -1;
-//	}
-//
-//	imshow("灰度图", img1);
-//  //imwrite("D:\\opencv_picture_test\\miku2.jpg", img1);//保存图片
-//	waitKey(0);
-//	return 0;
-//}
-
-/************练习3**********************/
-/*
-3.在练习1的基础上，在处理每个像素的时候加个一个条件。声明一个
-uchar变量
-uchar threshold = 100;
-如果average> threshold则average=255,否则为0。
-然后再把average值赋值给像素的3个通道，并通过imshow函数观察结果，
-然后修改threshold值，观察输出结果。
-*/
-//int main()
-//{
-//	Mat img1 = imread("D:\\opencv_picture_test\\miku2.jpg", 2 | 4);		//无损原图像
-//	if (img1.empty())
-//	{
-//		printf("Could not find the image!\n");
-//		return -1;
-//	}
-//	imshow("无损原图", img1);
-//	int height = img1.rows;	//行数/高
-//	int width = img1.cols;	//列数/宽
-//	byte threshold = 100;
-//	for (int j = 0;j < height;j++)
-//	{
-//		for (int i = 0;i < width;i++)
-//		{
-//			//描述：使用动态地址运算配合at访问,可读性强
-//			//--------------------开始像素处理-------------------
-//			byte ave = (img1.at<Vec3b>(j,i)[0]+ img1.at<Vec3b>(j, i)[1] + img1.at<Vec3b>(j, i)[2])/3;		//计算平均值
-//			//二值化
-//			if (ave > threshold)
-//			{
-//				img1.at<Vec3b>(j, i)[0] = 255;
-//				img1.at<Vec3b>(j, i)[1] = 255;
-//				img1.at<Vec3b>(j, i)[2] = 255;
-//			}
-//			else
-//			{
-//				img1.at<Vec3b>(j, i)[0] = 0;
-//				img1.at<Vec3b>(j, i)[1] = 0;
-//				img1.at<Vec3b>(j, i)[2] = 0;
-//			}
-//			//-------------------像素处理结束--------------------
-//		}
-//	}
-//	imshow("处理后的图像", img1);
-//    //imwrite("D:\\opencv_picture_test\\test1.jpg", img1);//保存图片
-//	waitKey(0);
-//	return 0;
-//}
-
-/************练习4**********************/
-/****mat的基本操作示例**********/
-/*
-赋值和构造函数只复制信息头
-Mat A,C;	//仅创建信息头部分
-A =imread();	//为矩阵开辟内容
-Mat B(A);		//使用拷贝构造函数
-C=A;		//赋值语句
-
-
-所有Mat指向同一个数据矩阵
-Mat D(A,Rect(0,0,100,100) );//使用矩形界定
-Mat E(Range:all(),Range(1,3) );//使用行和列界定
-
-使用copyto或者clone可以复制整个矩阵
-Mat F =A.clone();
-Mat G;
-A.copyTo(G);
-
-*/
-//int main()
-//{
-//	Mat img1 = imread("D:\\opencv_picture_test\\miku2.jpg", 2 | 4);		//无损原图像
-//	Mat deepMat, shallowMat;
-//	if (img1.empty())
-//	{
-//		printf("Could not find the image!\n");
-//		return -1;
-//	}
-//	imshow("无损原图", img1);
-//	shallowMat = img1;	//浅复制
-//	deepMat = img1.clone();	//深复制
-//	int height = img1.rows;	//行数/高
-//	int width = img1.cols;	//列数/宽
-//	byte threshold = 100;
-//	for (int j = 0;j < height;j++)
-//	{
-//		for (int i = 0;i < width;i++)
-//		{
-//			//描述：使用动态地址运算配合at访问,可读性强
-//			//--------------------开始像素处理-------------------
-//			byte ave = (img1.at<Vec3b>(j,i)[0]+ img1.at<Vec3b>(j, i)[1] + img1.at<Vec3b>(j, i)[2])/3;		//计算平均值
-//			//二值化
-//			if (ave > threshold)
-//			{
-//				img1.at<Vec3b>(j, i)[0] = 255;
-//				img1.at<Vec3b>(j, i)[1] = 255;
-//				img1.at<Vec3b>(j, i)[2] = 255;
-//			}
-//			else
-//			{
-//				img1.at<Vec3b>(j, i)[0] = 0;
-//				img1.at<Vec3b>(j, i)[1] = 0;
-//				img1.at<Vec3b>(j, i)[2] = 0;
-//			}
-//			//-------------------像素处理结束--------------------
-//		}
-//	}
-//	imshow("浅复制的图像", shallowMat);
-//	imshow("深复制的图像", deepMat);
-//	//观察结果： 深复制的没有改变     浅复制的改变了
-//    //imwrite("D:\\opencv_picture_test\\test1.jpg", img1);//保存图片
-//	waitKey(0);
-//	return 0;
-//}
-
+#define TYEPE_HS2D 1
+#define CAL_AND_DRAW 0
+#define CAL_AND_NOMALIZE 1
 
 
 //--------------------------------------------------------------非课堂练习部分-----------------------------------------------------------
@@ -321,158 +158,296 @@ range:每个特征空间的取值范围，如灰度值：range=[0,255];
 
 
 /*--------------------------绘制RGB三色一维直方图-------------------------------------*/
-Mat	My_Rraw_histogram(Mat* srcImage,int type)		//输入:要处理的灰度图   输出：该图像的直方图
-{
-	if (type == TYEPE_GRAY)		//一维灰度直方图绘制
-	{
-		//【1】将原图转化为灰度图
-		Mat gray_srcImage;
-		cvtColor(*srcImage,gray_srcImage, COLOR_BGR2GRAY);
-		//【2】定义变量
-		MatND dstHist;
-		int dims = 1;		//需要计算的直方图的维数
-		float grayranges[] = { 0,255 };
-		const float* ranges[] = { grayranges };	//这里需要为const类型
-		int size = 256;			//表示的是将统计的灰度值分成的等份
-		int Height = 256;
-		int channels = 0;	//灰度图只有一个0通道
+//Mat	My_Rraw_histogram(Mat* srcImage,int type)		//输入:要处理的灰度图   输出：该图像的直方图
+//{
+//	if (type == TYEPE_GRAY)		//一维灰度直方图绘制
+//	{
+//		//【1】将原图转化为灰度图
+//		Mat gray_srcImage;
+//		cvtColor(*srcImage,gray_srcImage, COLOR_BGR2GRAY);
+//		//【2】定义变量
+//		MatND dstHist;
+//		int dims = 1;		//需要计算的直方图的维数
+//		float grayranges[] = { 0,255 };
+//		const float* ranges[] = { grayranges };	//这里需要为const类型
+//		int size = 256;			//表示的是将统计的灰度值分成的等份
+//		int Height = 256;
+//		int channels = 0;	//灰度图只有一个0通道
+//
+//		//【3】计算图像直方图
+//		calcHist(srcImage,	//输入数组
+//			1,	//数组个数
+//			&channels,	//通道索引
+//			Mat(),//不使用掩膜
+//			dstHist,	//输出的目标直方图
+//			dims,	//需要计算的直方图的维数
+//			&size,	//存放每个维度的直方图尺寸的数组
+//			ranges);	//每一维数值的取值范围	
+//		int scale = 1;		//scale 每一个像素占的格数
+//
+//		Mat dstImage(size * scale, size, CV_8U, Scalar(0));		//长 ：size*scale ，宽：size ,值为0
+//
+//		//【4】获取最大值和最小值
+//		double minVal = 0;
+//		double maxVal = 0;
+//		minMaxLoc(dstHist, &minVal, &maxVal, 0, 0);		//获得直方图中最大值和最小值
+//
+//		//【5】绘制出直方图
+//		int hpt = saturate_cast<int>(0.9 * Height);			//saturate_cast 是溢出保护    大概意思 ：if(data<int的负范围)  data = 负最大; else if (data > int的正范围) data = int 正最大;
+//		for (int i = 0;i < 256;i++)
+//		{
+//			float binVal = dstHist.at<float>(i);
+//			int realVal = saturate_cast<int>(binVal * hpt / maxVal);		//在图像上的高度 = 像素数目/像素值最大数目 * 0.9*256   这里0.9是为了削减图像像素高度，因为最大的时候会触及顶端不美观
+//			rectangle(dstImage, Point(i * scale, Height - 1), Point((i + 1) * scale - 1, Height - realVal), Scalar(255));
+//			//要进行绘制的目标图像 矩形的左下顶点 矩阵对角线上的右上顶点 线条的颜色（RGB）或亮度（灰度图）  一共要绘制256个矩形
+//		}
+//		return dstImage;
+//	}
+//	else if (type == TYEPE_RGB)
+//	{
+//		//【1】定义变量
+//		MatND redHist,greenHist,blueHist;
+//		int dims = 1;		//需要计算的直方图的维数
+//		float grayranges[] = { 0,256 };
+//		const float* ranges[] = { grayranges };	//这里需要为const类型
+//		int size = 256;			//表示的是将统计的灰度值分成的等份
+//		int channels_r[] = { 2 };	
+//		int channels_g[] = { 1 };	
+//		int channels_b[] = { 0 };	
+//		//疑问 ： RGB图像的R、G、B是对应channel[0]、channel[1]、channel[2]还是对应channel[2]、channel[1]、channel[0] ？
+//		//经过验证是channel[2]、channel[1]、channel[0]
+//		//【2】计算图像直方图
+//		//--------------------red--------------------------
+//		calcHist(srcImage,	//输入数组
+//			1,	//数组个数
+//			channels_r,	//通道索引
+//			Mat(),//不使用掩膜
+//			redHist,	//输出的目标直方图
+//			dims,	//需要计算的直方图的维数
+//			&size,	//存放每个维度的直方图尺寸的数组
+//			ranges,//每一维数值的取值范围	
+//			true,//指示直方图是否均匀的标识符，true表示均匀的直方图
+//			false);	//累计标识符，false表示直方图在配置阶段会被清零
+//		//--------------------green--------------------------
+//		calcHist(srcImage,	//输入数组
+//			1,	//数组个数
+//			channels_g,	//通道索引
+//			Mat(),//不使用掩膜
+//			greenHist,	//输出的目标直方图
+//			dims,	//需要计算的直方图的维数
+//			&size,	//存放每个维度的直方图尺寸的数组
+//			ranges,//每一维数值的取值范围	
+//			true,//指示直方图是否均匀的标识符，true表示均匀的直方图
+//			false);	//累计标识符，false表示直方图在配置阶段会被清零
+//		//--------------------blue--------------------------
+//		calcHist(srcImage,	//输入数组
+//			1,	//数组个数
+//			channels_b,	//通道索引
+//			Mat(),//不使用掩膜
+//			blueHist,	//输出的目标直方图
+//			dims,	//需要计算的直方图的维数
+//			&size,	//存放每个维度的直方图尺寸的数组
+//			ranges,//每一维数值的取值范围	
+//			true,//指示直方图是否均匀的标识符，true表示均匀的直方图
+//			false);	//累计标识符，false表示直方图在配置阶段会被清零
+//
+//		//【3】获取最大值和最小值
+//		double minVal_r = 0, minVal_g = 0, minVal_b = 0;
+//		double maxVal_r = 0, maxVal_g = 0,maxVal_b = 0;
+//		minMaxLoc(redHist, &minVal_r, &maxVal_r, 0, 0);		//获得r直方图中最大值和最小值
+//		minMaxLoc(greenHist, &minVal_g, &maxVal_g, 0, 0);		//获得g直方图中最大值和最小值
+//		minMaxLoc(blueHist, &minVal_b, &maxVal_b, 0, 0);		//获得b直方图中最大值和最小值
+//
+//		int scale = 1;		//scale 每一个像素占的格数
+//		int Height = 256;	//直方图高度
+//		Mat dstImage(Height, size*3, CV_8UC3, Scalar(0,0,0));		//长 ：size*scale ，宽：size*3 ,值为0  将三个直方图横放在一起
+//		//【4】绘制出直方图
+//		int hpt = saturate_cast<int>(0.9 * Height);			//saturate_cast 是溢出保护    大概意思 ：if(data<int的负范围)  data = 负最大; else if (data > int的正范围) data = int 正最大;
+//		for (int i = 0;i < 256;i++)
+//		{
+//			float binVal_r = redHist.at<float>(i);
+//			float binVal_g = greenHist.at<float>(i);
+//			float binVal_b = blueHist.at<float>(i);
+//			//疑问：是否存在一张图片中maxVal_r or maxVal_g or maxVal_b 有一个值为0？这样算出来的值将会是0/0， 而实际值应该是 0
+//			int intensityl_r = saturate_cast<int>(binVal_r * hpt / maxVal_r);		//在图像上的高度 = 像素数目/像素值最大数目 * 0.9*256   这里0.9是为了削减图像像素高度，因为最大的时候会触及顶端不美观
+//			int intensityl_g = saturate_cast<int>(binVal_g * hpt / maxVal_g);
+//			int intensityl_b = saturate_cast<int>(binVal_b * hpt / maxVal_b);
+//			
+//			rectangle(dstImage, Point(i * scale, Height - 1), Point((i + 1) * scale - 1, Height - intensityl_r), Scalar(0,0,255));
+//			rectangle(dstImage, Point((i+size)* scale, Height - 1), Point((i + size + 1)* scale - 1, Height - intensityl_g), Scalar(0,255,0));
+//			rectangle(dstImage, Point((i + 2*size)* scale, Height - 1), Point((i + 2*size + 1)* scale - 1, Height - intensityl_b), Scalar(255,0,0));
+//			//要进行绘制的目标图像 矩形的左下顶点 矩阵对角线上的右上顶点 线条的颜色（RGB）或亮度（灰度图）  一共要绘制256个矩形
+//		}
+//		return dstImage;
+//	}
+//	else
+//	{
+//
+//	}
+//}
+////主函数
+//int main()
+//{
+//	//【1】载入原图
+//	Mat srcImage = imread("D:\\opencv_picture_test\\RGB纯色图\\red.jpg", 2|4);			//原图
+//	//Mat srcImage = imread("D:\\opencv_picture_test\\JQ\\JQ14.jpg", 2 | 4);			//原图
+//	namedWindow("原图", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
+//	imshow("原图", srcImage);
+//	if (srcImage.empty())
+//	{
+//		printf("Could not find the image!\n");
+//		return -1;
+//	}
+//	Mat dstImage = My_Rraw_histogram(&srcImage, TYEPE_RGB);
+//	namedWindow("一维直方图", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
+//	imshow("一维直方图", dstImage);
+//	waitKey(0);
+//	return 0;
+//}
 
-		//【3】计算图像直方图
-		calcHist(srcImage,	//输入数组
-			1,	//数组个数
-			&channels,	//通道索引
-			Mat(),//不使用掩膜
-			dstHist,	//输出的目标直方图
-			dims,	//需要计算的直方图的维数
-			&size,	//存放每个维度的直方图尺寸的数组
-			ranges);	//每一维数值的取值范围	
-		int scale = 1;		//scale 每一个像素占的格数
+//直方图对比
+/*
+double compareHist(Inputarray H1,Inputarray H2, int method);
+//前两个参数是要比较的大小相同的直方图，第三个变量是所选择的距离标准
+有四种：
+1、相关 correlation               method = CV_COMP_CORREL			 (  sum of (H1(i)-aveH1)*(H2(i)-aveH2) )  / sqrt(  sum of (H1(i)-aveH1)^2  *sum of (H2(i)-aveH2)^2 )
+2、卡方 Chi-Square                method = CV_COMP_CHISQR				sum of (H1(i)-H2(i))^2/H1(i)
+3、直方图相交 Intersection        method = CV_COMP_INTERSECT			sum of (min(H1(i),H2(i)))
+4、Bhattacharyya 距离(巴氏距离)   method = CV_COMP_BHATTACHARYYA     
+*/
+/*--------------------二维直方图计算及绘制函数-------------------*/
+//描述 输入 ：要处理的图  type1:转化到不同类型的二维直方图   type2： 绘制直方图 还是 仅计算归一化直方图
+//Mat	My_Rraw_histogram_2D(Mat* srcImage,int type1,int type2)		//输入:要处理的图   输出：该图像的二维直方图
+//{
+//	if (type1 == TYEPE_HS2D)		//H-S直方图 色调、饱和度二维直方图绘制
+//	{
+//		if (type2 == CAL_AND_DRAW)
+//		{
+//			Mat hsvImage;
+//			//【1】转化到HSV空间
+//			cvtColor(*srcImage, hsvImage, COLOR_BGR2HSV);		//完成转化
+//			//【2】参数准备
+//			//将色调量化为30个等级，将饱和度量化为32个等级
+//			int hueBinnum = 30;		//色调直方图的直条数量
+//			int saturationBinNum = 32;//饱和度的直方图条数
+//			int histSize[] = { hueBinnum,saturationBinNum };//将横坐标分为30份   纵坐标分为32份
+//			//定义色调范围为0-179
+//			float hueRanges[] = { 0,180 };
+//			//定义饱和度变化为0-255
+//			float saturationRanges[] = { 0,256 };
+//			const float* ranges[] = { hueRanges,saturationRanges };
+//			MatND dstHist;		//:MatND是直方图对应的数据类型,用来存储直方图.
+//
+//			//参数准备，calHist函数中将计算第0通道和第1通道的直方图
+//			int channels[] = { 0,1 };
+//
+//			//【3】正式调用calcHist，进行直方图计算
+//			calcHist(&hsvImage,	//输入数组
+//				1,	//数组个数
+//				channels,	//通道索引
+//				Mat(),//不使用掩膜
+//				dstHist,	//输出的目标直方图
+//				2,	//需要计算的直方图的维数
+//				histSize,	//存放每个维度的直方图尺寸的数组
+//				ranges,		//每一维数值的取值范围
+//				true,	//指示直方图是否均匀的标识符，true表示均匀的直方图
+//				false);	//累计标识符，false表示直方图在配置阶段会被清零
+//			//【4】为绘制直方图准备参数
+//			double maxVal = 0;	//最大值
+//			minMaxLoc(dstHist, 0, &maxVal, 0, 0);	//查找数组和子数组的全局最小值和最大值存入maxVal中
+//			int scale = 10;
+//			Mat histImg = Mat::zeros(saturationBinNum * scale, hueBinnum * scale, CV_8UC3);
+//
+//			//【5】双层循环，进行直方图绘制
+//			for (int hue = 0;hue < hueBinnum;hue++)
+//			{
+//				for (int saturation = 0;saturation < saturationBinNum;saturation++)
+//				{
+//					float binVal = dstHist.at<float>(hue, saturation);	//直方图直条的值
+//					int intensity = cvRound(binVal * 255 / maxVal);		//强度
+//
+//					//正式进行绘制
+//					rectangle(histImg, Point(hue * scale, saturation * scale), Point((hue + 1) * scale - 1, (saturation + 1) * scale - 1), Scalar::all(intensity), FILLED);
+//				}
+//			}
+//			return histImg;
+//		}
+//		else
+//		{
+//			Mat hsvImage;
+//			//【1】转化到HSV空间
+//			cvtColor(*srcImage, hsvImage, COLOR_BGR2HSV);		//完成转化
+//			//【2】参数准备
+//			//将色调量化为30个等级，将饱和度量化为32个等级
+//			int hueBinnum = 30;		//色调直方图的直条数量
+//			int saturationBinNum = 32;//饱和度的直方图条数
+//			int histSize[] = { hueBinnum,saturationBinNum };//将横坐标分为30份   纵坐标分为32份
+//			//定义色调范围为0-179
+//			float hueRanges[] = { 0,180 };
+//			//定义饱和度变化为0-255
+//			float saturationRanges[] = { 0,256 };
+//			const float* ranges[] = { hueRanges,saturationRanges };
+//			MatND dstHist;		//:MatND是直方图对应的数据类型,用来存储直方图.
+//
+//			//参数准备，calHist函数中将计算第0通道和第1通道的直方图
+//			int channels[] = { 0,1 };
+//
+//			//【3】正式调用calcHist，进行直方图计算
+//			calcHist(&hsvImage,	//输入数组
+//				1,	//数组个数
+//				channels,	//通道索引
+//				Mat(),//不使用掩膜
+//				dstHist,	//输出的目标直方图
+//				2,	//需要计算的直方图的维数
+//				histSize,	//存放每个维度的直方图尺寸的数组
+//				ranges,		//每一维数值的取值范围
+//				true,	//指示直方图是否均匀的标识符，true表示均匀的直方图
+//				false);	//累计标识符，false表示直方图在配置阶段会被清零
+//			normalize(dstHist, dstHist, 0, 1, NORM_MINMAX, -1, Mat());	//归一化
+//			return dstHist;
+//		}
+//	}
+//	else
+//	{
+//
+//	}
+//}
 
-		Mat dstImage(size * scale, size, CV_8U, Scalar(0));		//长 ：size*scale ，宽：size ,值为0
-
-		//【4】获取最大值和最小值
-		double minVal = 0;
-		double maxVal = 0;
-		minMaxLoc(dstHist, &minVal, &maxVal, 0, 0);		//获得直方图中最大值和最小值
-
-		//【5】绘制出直方图
-		int hpt = saturate_cast<int>(0.9 * Height);			//saturate_cast 是溢出保护    大概意思 ：if(data<int的负范围)  data = 负最大; else if (data > int的正范围) data = int 正最大;
-		for (int i = 0;i < 256;i++)
-		{
-			float binVal = dstHist.at<float>(i);
-			int realVal = saturate_cast<int>(binVal * hpt / maxVal);		//在图像上的高度 = 像素数目/像素值最大数目 * 0.9*256   这里0.9是为了削减图像像素高度，因为最大的时候会触及顶端不美观
-			rectangle(dstImage, Point(i * scale, Height - 1), Point((i + 1) * scale - 1, Height - realVal), Scalar(255));
-			//要进行绘制的目标图像 矩形的左下顶点 矩阵对角线上的右上顶点 线条的颜色（RGB）或亮度（灰度图）  一共要绘制256个矩形
-		}
-		return dstImage;
-	}
-	else if (type == TYEPE_RGB)
-	{
-		//【1】定义变量
-		MatND redHist,greenHist,blueHist;
-		int dims = 1;		//需要计算的直方图的维数
-		float grayranges[] = { 0,256 };
-		const float* ranges[] = { grayranges };	//这里需要为const类型
-		int size = 256;			//表示的是将统计的灰度值分成的等份
-		int channels_r[] = { 2 };	
-		int channels_g[] = { 1 };	
-		int channels_b[] = { 0 };	
-		//疑问 ： RGB图像的R、G、B是对应channel[0]、channel[1]、channel[2]还是对应channel[2]、channel[1]、channel[0] ？
-		//经过验证是channel[2]、channel[1]、channel[0]
-		//【2】计算图像直方图
-		//--------------------red--------------------------
-		calcHist(srcImage,	//输入数组
-			1,	//数组个数
-			channels_r,	//通道索引
-			Mat(),//不使用掩膜
-			redHist,	//输出的目标直方图
-			dims,	//需要计算的直方图的维数
-			&size,	//存放每个维度的直方图尺寸的数组
-			ranges,//每一维数值的取值范围	
-			true,//指示直方图是否均匀的标识符，true表示均匀的直方图
-			false);	//累计标识符，false表示直方图在配置阶段会被清零
-		//--------------------green--------------------------
-		calcHist(srcImage,	//输入数组
-			1,	//数组个数
-			channels_g,	//通道索引
-			Mat(),//不使用掩膜
-			greenHist,	//输出的目标直方图
-			dims,	//需要计算的直方图的维数
-			&size,	//存放每个维度的直方图尺寸的数组
-			ranges,//每一维数值的取值范围	
-			true,//指示直方图是否均匀的标识符，true表示均匀的直方图
-			false);	//累计标识符，false表示直方图在配置阶段会被清零
-		//--------------------blue--------------------------
-		calcHist(srcImage,	//输入数组
-			1,	//数组个数
-			channels_b,	//通道索引
-			Mat(),//不使用掩膜
-			blueHist,	//输出的目标直方图
-			dims,	//需要计算的直方图的维数
-			&size,	//存放每个维度的直方图尺寸的数组
-			ranges,//每一维数值的取值范围	
-			true,//指示直方图是否均匀的标识符，true表示均匀的直方图
-			false);	//累计标识符，false表示直方图在配置阶段会被清零
-
-		//【3】获取最大值和最小值
-		double minVal_r = 0, minVal_g = 0, minVal_b = 0;
-		double maxVal_r = 0, maxVal_g = 0,maxVal_b = 0;
-		minMaxLoc(redHist, &minVal_r, &maxVal_r, 0, 0);		//获得r直方图中最大值和最小值
-		minMaxLoc(greenHist, &minVal_g, &maxVal_g, 0, 0);		//获得g直方图中最大值和最小值
-		minMaxLoc(blueHist, &minVal_b, &maxVal_b, 0, 0);		//获得b直方图中最大值和最小值
-
-		int scale = 1;		//scale 每一个像素占的格数
-		int Height = 256;	//直方图高度
-		Mat dstImage(Height, size*3, CV_8UC3, Scalar(0,0,0));		//长 ：size*scale ，宽：size*3 ,值为0  将三个直方图横放在一起
-		//【4】绘制出直方图
-		int hpt = saturate_cast<int>(0.9 * Height);			//saturate_cast 是溢出保护    大概意思 ：if(data<int的负范围)  data = 负最大; else if (data > int的正范围) data = int 正最大;
-		for (int i = 0;i < 256;i++)
-		{
-			float binVal_r = redHist.at<float>(i);
-			float binVal_g = greenHist.at<float>(i);
-			float binVal_b = blueHist.at<float>(i);
-			//疑问：是否存在一张图片中maxVal_r or maxVal_g or maxVal_b 有一个值为0？这样算出来的值将会是0/0， 而实际值应该是 0
-			int intensityl_r = saturate_cast<int>(binVal_r * hpt / maxVal_r);		//在图像上的高度 = 像素数目/像素值最大数目 * 0.9*256   这里0.9是为了削减图像像素高度，因为最大的时候会触及顶端不美观
-			int intensityl_g = saturate_cast<int>(binVal_g * hpt / maxVal_g);
-			int intensityl_b = saturate_cast<int>(binVal_b * hpt / maxVal_b);
-			
-			rectangle(dstImage, Point(i * scale, Height - 1), Point((i + 1) * scale - 1, Height - intensityl_r), Scalar(0,0,255));
-			rectangle(dstImage, Point((i+size)* scale, Height - 1), Point((i + size + 1)* scale - 1, Height - intensityl_g), Scalar(0,255,0));
-			rectangle(dstImage, Point((i + 2*size)* scale, Height - 1), Point((i + 2*size + 1)* scale - 1, Height - intensityl_b), Scalar(255,0,0));
-			//要进行绘制的目标图像 矩形的左下顶点 矩阵对角线上的右上顶点 线条的颜色（RGB）或亮度（灰度图）  一共要绘制256个矩形
-		}
-		return dstImage;
-	}
-	else
-	{
-
-	}
-}
-//主函数
-int main()
-{
-	//【1】载入原图
-	Mat srcImage = imread("D:\\opencv_picture_test\\RGB纯色图\\red.jpg", 2|4);			//原图
-	//Mat srcImage = imread("D:\\opencv_picture_test\\JQ\\JQ14.jpg", 2 | 4);			//原图
-	namedWindow("原图", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
-	imshow("原图", srcImage);
-	if (srcImage.empty())
-	{
-		printf("Could not find the image!\n");
-		return -1;
-	}
-	Mat dstImage = My_Rraw_histogram(&srcImage, TYEPE_RGB);
-	namedWindow("一维直方图", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
-	imshow("一维直方图", dstImage);
-	waitKey(0);
-	return 0;
-}
-
-
-
-
-
-
+//int main()
+//{
+//	//【1】load两幅图片
+//	//Mat srcImage1 = imread("D:\\opencv_picture_test\\JQ\\JQ5.jpg", 2 | 4);			//原图
+//	//Mat srcImage2 = imread("D:\\opencv_picture_test\\JQ\\JQ18.jpg", 2|4);			//原图
+//	Mat srcImage1 = imread("D:\\opencv_picture_test\\miku\\miku2.jpg", 2 | 4);			//原图
+//	Mat srcImage2 = imread("D:\\opencv_picture_test\\miku\\miku5.jpg", 2 | 4);			//原图
+//	if (srcImage1.empty() || srcImage2.empty())
+//	{
+//		printf("Could not find the image!\n");
+//		return -1;
+//	}
+//	//【2】show两幅图片
+//	namedWindow("素材图1", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
+//	imshow("素材图1", srcImage1);
+//	namedWindow("素材图2", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
+//	imshow("素材图2", srcImage2);
+//	//【2】计算直方图并且归一化
+//	Mat histImg1, histImg2;
+//	histImg1 = My_Rraw_histogram_2D(&srcImage1, TYEPE_HS2D, CAL_AND_NOMALIZE);
+//	histImg2 = My_Rraw_histogram_2D(&srcImage2, TYEPE_HS2D, CAL_AND_NOMALIZE);
+//
+//	//利用库函数来比较
+//	double src_src1 = compareHist(histImg1, histImg2, 0);
+//	double src_src2 = compareHist(histImg1, histImg2, 1);
+//	double src_src3 = compareHist(histImg1, histImg2, 2);
+//	double src_src4 = compareHist(histImg1, histImg2, 3);
+//
+//	cout << "相关性 : " << src_src1 << endl;
+//	cout << "卡方 : " << src_src2 << endl;
+//	cout << "直方图相交 : " << src_src3 << endl;
+//	cout << "巴氏距离 : " << src_src4 << endl;
+//	waitKey(0);
+//	return 0;
+//}
 
 
 
@@ -786,11 +761,11 @@ cout << "此方法运行时间为：" << time0 << "秒" <<endl;	//输出运行�
 
 //-----------------------------------------------颜色缩减函数------------------------------------------------
 //void colorReduce(Mat& inputImage,Mat& outputImage,int div,int type);
-
-//-----------------------------------------------主函数------------------------------------------------
+//
+////-----------------------------------------------主函数------------------------------------------------
 //int main()
 //{
-//	Mat srcImage = imread("D:\\opencv_picture_test\\miku2.jpg", 2 | 4);
+//	Mat srcImage = imread("D:\\opencv_picture_test\\miku\\miku2.jpg", 2 | 4);
 //	namedWindow("原始图", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
 //	imshow("原始图", srcImage);
 //
@@ -806,7 +781,7 @@ cout << "此方法运行时间为：" << time0 << "秒" <<endl;	//输出运行�
 //	cout << "此方法运行时间为：" << time0 << "秒" << endl;	//输出运行时间
 //	namedWindow("效果图", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
 //	imshow("效果图", dstImage);
-//	imwrite("D:\\opencv_picture_test\\miku5.jpg", dstImage);
+//	//imwrite("D:\\opencv_picture_test\\miku5.jpg", dstImage);
 //
 //	waitKey(0);
 //	return 0;
@@ -1246,5 +1221,178 @@ Mat roi = img(Range(250, 250 +xleng), Range(200, 200 + yleng));
 //		imshow("处理后的视频", dstImage);	//显示当前帧
 //		if(waitKey(10) >= 0) break;	//延时10ms
 //	}
+//	return 0;
+//}
+
+
+
+
+
+
+
+
+//--------------------------------------------------------------课堂练习部分-----------------------------------------------------------
+/************练习1**********************/
+//imread 功能是加载图像文件成为一个 Mat 对象，其中第一个参数表示 图像文件名称 。第二个参数表示 读取图像的颜色类型（默认参数是1） ，返回3通道图像，支持常见的三个参数值：
+//int main()
+//{
+//	Mat img1 = imread("D:\\opencv_picture_test\\miku2.jpg", 2 | 4);		//无损原图像
+//	if (img1.empty())
+//	{
+//		printf("Could not find the image!\n");
+//		return -1;
+//	}
+//	imshow("无损原图", img1);
+//	int height = img1.rows;	//行数/高
+//	int width = img1.cols;	//列数/宽
+//	
+//	for (int j = 0;j < height;j++)
+//	{
+//		for (int i = 0;i < width;i++)
+//		{
+//			//描述：使用动态地址运算配合at访问,可读性强
+//			//--------------------开始像素处理-------------------
+//			byte ave = (img1.at<Vec3b>(j,i)[0]+ img1.at<Vec3b>(j, i)[1] + img1.at<Vec3b>(j, i)[2])/3;		//计算平均值
+//			img1.at<Vec3b>(j, i)[0] = ave;
+//			img1.at<Vec3b>(j, i)[1] = ave;
+//			img1.at<Vec3b>(j, i)[2] = ave;
+//			//-------------------像素处理结束--------------------
+//		}
+//	}
+//	imshow("处理后的图像", img1);
+//    //imwrite("D:\\opencv_picture_test\\test1.jpg", img1);//保存图片
+//	waitKey(0);
+//	return 0;
+//}
+
+/************练习2**********************/
+//int main()
+//{
+//	Mat img1 = imread("D:\\opencv_picture_test\\miku2.jpg", 0);			//灰度图
+//	if (img1.empty())
+//	{
+//		printf("Could not find the image!\n");
+//		return -1;
+//	}
+//
+//	imshow("灰度图", img1);
+//  //imwrite("D:\\opencv_picture_test\\miku2.jpg", img1);//保存图片
+//	waitKey(0);
+//	return 0;
+//}
+
+/************练习3**********************/
+/*
+3.在练习1的基础上，在处理每个像素的时候加个一个条件。声明一个
+uchar变量
+uchar threshold = 100;
+如果average> threshold则average=255,否则为0。
+然后再把average值赋值给像素的3个通道，并通过imshow函数观察结果，
+然后修改threshold值，观察输出结果。
+*/
+//int main()
+//{
+//	Mat img1 = imread("D:\\opencv_picture_test\\miku2.jpg", 2 | 4);		//无损原图像
+//	if (img1.empty())
+//	{
+//		printf("Could not find the image!\n");
+//		return -1;
+//	}
+//	imshow("无损原图", img1);
+//	int height = img1.rows;	//行数/高
+//	int width = img1.cols;	//列数/宽
+//	byte threshold = 100;
+//	for (int j = 0;j < height;j++)
+//	{
+//		for (int i = 0;i < width;i++)
+//		{
+//			//描述：使用动态地址运算配合at访问,可读性强
+//			//--------------------开始像素处理-------------------
+//			byte ave = (img1.at<Vec3b>(j,i)[0]+ img1.at<Vec3b>(j, i)[1] + img1.at<Vec3b>(j, i)[2])/3;		//计算平均值
+//			//二值化
+//			if (ave > threshold)
+//			{
+//				img1.at<Vec3b>(j, i)[0] = 255;
+//				img1.at<Vec3b>(j, i)[1] = 255;
+//				img1.at<Vec3b>(j, i)[2] = 255;
+//			}
+//			else
+//			{
+//				img1.at<Vec3b>(j, i)[0] = 0;
+//				img1.at<Vec3b>(j, i)[1] = 0;
+//				img1.at<Vec3b>(j, i)[2] = 0;
+//			}
+//			//-------------------像素处理结束--------------------
+//		}
+//	}
+//	imshow("处理后的图像", img1);
+//    //imwrite("D:\\opencv_picture_test\\test1.jpg", img1);//保存图片
+//	waitKey(0);
+//	return 0;
+//}
+
+/************练习4**********************/
+/****mat的基本操作示例**********/
+/*
+赋值和构造函数只复制信息头
+Mat A,C;	//仅创建信息头部分
+A =imread();	//为矩阵开辟内容
+Mat B(A);		//使用拷贝构造函数
+C=A;		//赋值语句
+
+
+所有Mat指向同一个数据矩阵
+Mat D(A,Rect(0,0,100,100) );//使用矩形界定
+Mat E(Range:all(),Range(1,3) );//使用行和列界定
+
+使用copyto或者clone可以复制整个矩阵
+Mat F =A.clone();
+Mat G;
+A.copyTo(G);
+
+*/
+//int main()
+//{
+//	Mat img1 = imread("D:\\opencv_picture_test\\miku2.jpg", 2 | 4);		//无损原图像
+//	Mat deepMat, shallowMat;
+//	if (img1.empty())
+//	{
+//		printf("Could not find the image!\n");
+//		return -1;
+//	}
+//	imshow("无损原图", img1);
+//	shallowMat = img1;	//浅复制
+//	deepMat = img1.clone();	//深复制
+//	int height = img1.rows;	//行数/高
+//	int width = img1.cols;	//列数/宽
+//	byte threshold = 100;
+//	for (int j = 0;j < height;j++)
+//	{
+//		for (int i = 0;i < width;i++)
+//		{
+//			//描述：使用动态地址运算配合at访问,可读性强
+//			//--------------------开始像素处理-------------------
+//			byte ave = (img1.at<Vec3b>(j,i)[0]+ img1.at<Vec3b>(j, i)[1] + img1.at<Vec3b>(j, i)[2])/3;		//计算平均值
+//			//二值化
+//			if (ave > threshold)
+//			{
+//				img1.at<Vec3b>(j, i)[0] = 255;
+//				img1.at<Vec3b>(j, i)[1] = 255;
+//				img1.at<Vec3b>(j, i)[2] = 255;
+//			}
+//			else
+//			{
+//				img1.at<Vec3b>(j, i)[0] = 0;
+//				img1.at<Vec3b>(j, i)[1] = 0;
+//				img1.at<Vec3b>(j, i)[2] = 0;
+//			}
+//			//-------------------像素处理结束--------------------
+//		}
+//	}
+//	imshow("浅复制的图像", shallowMat);
+//	imshow("深复制的图像", deepMat);
+//	//观察结果： 深复制的没有改变     浅复制的改变了
+//    //imwrite("D:\\opencv_picture_test\\test1.jpg", img1);//保存图片
+//	waitKey(0);
 //	return 0;
 //}
