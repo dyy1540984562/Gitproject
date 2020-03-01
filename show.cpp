@@ -317,137 +317,137 @@ double compareHist(Inputarray H1,Inputarray H2, int method);
 */
 /*--------------------二维直方图计算及绘制函数-------------------*/
 //描述 输入 ：要处理的图  type1:转化到不同类型的二维直方图   type2： 绘制直方图 还是 仅计算归一化直方图
-//Mat	My_Rraw_histogram_2D(Mat* srcImage,int type1,int type2)		//输入:要处理的图   输出：该图像的二维直方图
-//{
-//	if (type1 == TYEPE_HS2D)		//H-S直方图 色调、饱和度二维直方图绘制
-//	{
-//		if (type2 == CAL_AND_DRAW)
-//		{
-//			Mat hsvImage;
-//			//【1】转化到HSV空间
-//			cvtColor(*srcImage, hsvImage, COLOR_BGR2HSV);		//完成转化
-//			//【2】参数准备
-//			//将色调量化为30个等级，将饱和度量化为32个等级
-//			int hueBinnum = 30;		//色调直方图的直条数量
-//			int saturationBinNum = 32;//饱和度的直方图条数
-//			int histSize[] = { hueBinnum,saturationBinNum };//将横坐标分为30份   纵坐标分为32份
-//			//定义色调范围为0-179
-//			float hueRanges[] = { 0,180 };
-//			//定义饱和度变化为0-255
-//			float saturationRanges[] = { 0,256 };
-//			const float* ranges[] = { hueRanges,saturationRanges };
-//			MatND dstHist;		//:MatND是直方图对应的数据类型,用来存储直方图.
-//
-//			//参数准备，calHist函数中将计算第0通道和第1通道的直方图
-//			int channels[] = { 0,1 };
-//
-//			//【3】正式调用calcHist，进行直方图计算
-//			calcHist(&hsvImage,	//输入数组
-//				1,	//数组个数
-//				channels,	//通道索引
-//				Mat(),//不使用掩膜
-//				dstHist,	//输出的目标直方图
-//				2,	//需要计算的直方图的维数
-//				histSize,	//存放每个维度的直方图尺寸的数组
-//				ranges,		//每一维数值的取值范围
-//				true,	//指示直方图是否均匀的标识符，true表示均匀的直方图
-//				false);	//累计标识符，false表示直方图在配置阶段会被清零
-//			//【4】为绘制直方图准备参数
-//			double maxVal = 0;	//最大值
-//			minMaxLoc(dstHist, 0, &maxVal, 0, 0);	//查找数组和子数组的全局最小值和最大值存入maxVal中
-//			int scale = 10;
-//			Mat histImg = Mat::zeros(saturationBinNum * scale, hueBinnum * scale, CV_8UC3);
-//
-//			//【5】双层循环，进行直方图绘制
-//			for (int hue = 0;hue < hueBinnum;hue++)
-//			{
-//				for (int saturation = 0;saturation < saturationBinNum;saturation++)
-//				{
-//					float binVal = dstHist.at<float>(hue, saturation);	//直方图直条的值
-//					int intensity = cvRound(binVal * 255 / maxVal);		//强度
-//
-//					//正式进行绘制
-//					rectangle(histImg, Point(hue * scale, saturation * scale), Point((hue + 1) * scale - 1, (saturation + 1) * scale - 1), Scalar::all(intensity), FILLED);
-//				}
-//			}
-//			return histImg;
-//		}
-//		else
-//		{
-//			Mat hsvImage;
-//			//【1】转化到HSV空间
-//			cvtColor(*srcImage, hsvImage, COLOR_BGR2HSV);		//完成转化
-//			//【2】参数准备
-//			//将色调量化为30个等级，将饱和度量化为32个等级
-//			int hueBinnum = 30;		//色调直方图的直条数量
-//			int saturationBinNum = 32;//饱和度的直方图条数
-//			int histSize[] = { hueBinnum,saturationBinNum };//将横坐标分为30份   纵坐标分为32份
-//			//定义色调范围为0-179
-//			float hueRanges[] = { 0,180 };
-//			//定义饱和度变化为0-255
-//			float saturationRanges[] = { 0,256 };
-//			const float* ranges[] = { hueRanges,saturationRanges };
-//			MatND dstHist;		//:MatND是直方图对应的数据类型,用来存储直方图.
-//
-//			//参数准备，calHist函数中将计算第0通道和第1通道的直方图
-//			int channels[] = { 0,1 };
-//
-//			//【3】正式调用calcHist，进行直方图计算
-//			calcHist(&hsvImage,	//输入数组
-//				1,	//数组个数
-//				channels,	//通道索引
-//				Mat(),//不使用掩膜
-//				dstHist,	//输出的目标直方图
-//				2,	//需要计算的直方图的维数
-//				histSize,	//存放每个维度的直方图尺寸的数组
-//				ranges,		//每一维数值的取值范围
-//				true,	//指示直方图是否均匀的标识符，true表示均匀的直方图
-//				false);	//累计标识符，false表示直方图在配置阶段会被清零
-//			normalize(dstHist, dstHist, 0, 1, NORM_MINMAX, -1, Mat());	//归一化
-//			return dstHist;
-//		}
-//	}
-//	else
-//	{
-//
-//	}
-//}
+Mat	My_Rraw_histogram_2D(Mat* srcImage,int type1,int type2)		//输入:要处理的图   输出：该图像的二维直方图
+{
+	if (type1 == TYEPE_HS2D)		//H-S直方图 色调、饱和度二维直方图绘制
+	{
+		if (type2 == CAL_AND_DRAW)
+		{
+			Mat hsvImage;
+			//【1】转化到HSV空间
+			cvtColor(*srcImage, hsvImage, COLOR_BGR2HSV);		//完成转化
+			//【2】参数准备
+			//将色调量化为30个等级，将饱和度量化为32个等级
+			int hueBinnum = 30;		//色调直方图的直条数量
+			int saturationBinNum = 32;//饱和度的直方图条数
+			int histSize[] = { hueBinnum,saturationBinNum };//将横坐标分为30份   纵坐标分为32份
+			//定义色调范围为0-179
+			float hueRanges[] = { 0,180 };
+			//定义饱和度变化为0-255
+			float saturationRanges[] = { 0,256 };
+			const float* ranges[] = { hueRanges,saturationRanges };
+			MatND dstHist;		//:MatND是直方图对应的数据类型,用来存储直方图.
 
-//int main()
-//{
-//	//【1】load两幅图片
-//	//Mat srcImage1 = imread("D:\\opencv_picture_test\\JQ\\JQ5.jpg", 2 | 4);			//原图
-//	//Mat srcImage2 = imread("D:\\opencv_picture_test\\JQ\\JQ18.jpg", 2|4);			//原图
-//	Mat srcImage1 = imread("D:\\opencv_picture_test\\miku\\miku2.jpg", 2 | 4);			//原图
-//	Mat srcImage2 = imread("D:\\opencv_picture_test\\miku\\miku5.jpg", 2 | 4);			//原图
-//	if (srcImage1.empty() || srcImage2.empty())
-//	{
-//		printf("Could not find the image!\n");
-//		return -1;
-//	}
-//	//【2】show两幅图片
-//	namedWindow("素材图1", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
-//	imshow("素材图1", srcImage1);
-//	namedWindow("素材图2", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
-//	imshow("素材图2", srcImage2);
-//	//【2】计算直方图并且归一化
-//	Mat histImg1, histImg2;
-//	histImg1 = My_Rraw_histogram_2D(&srcImage1, TYEPE_HS2D, CAL_AND_NOMALIZE);
-//	histImg2 = My_Rraw_histogram_2D(&srcImage2, TYEPE_HS2D, CAL_AND_NOMALIZE);
-//
-//	//利用库函数来比较
-//	double src_src1 = compareHist(histImg1, histImg2, 0);
-//	double src_src2 = compareHist(histImg1, histImg2, 1);
-//	double src_src3 = compareHist(histImg1, histImg2, 2);
-//	double src_src4 = compareHist(histImg1, histImg2, 3);
-//
-//	cout << "相关性 : " << src_src1 << endl;
-//	cout << "卡方 : " << src_src2 << endl;
-//	cout << "直方图相交 : " << src_src3 << endl;
-//	cout << "巴氏距离 : " << src_src4 << endl;
-//	waitKey(0);
-//	return 0;
-//}
+			//参数准备，calHist函数中将计算第0通道和第1通道的直方图
+			int channels[] = { 0,1 };
+
+			//【3】正式调用calcHist，进行直方图计算
+			calcHist(&hsvImage,	//输入数组
+				1,	//数组个数
+				channels,	//通道索引
+				Mat(),//不使用掩膜
+				dstHist,	//输出的目标直方图
+				2,	//需要计算的直方图的维数
+				histSize,	//存放每个维度的直方图尺寸的数组
+				ranges,		//每一维数值的取值范围
+				true,	//指示直方图是否均匀的标识符，true表示均匀的直方图
+				false);	//累计标识符，false表示直方图在配置阶段会被清零
+			//【4】为绘制直方图准备参数
+			double maxVal = 0;	//最大值
+			minMaxLoc(dstHist, 0, &maxVal, 0, 0);	//查找数组和子数组的全局最小值和最大值存入maxVal中
+			int scale = 10;
+			Mat histImg = Mat::zeros(saturationBinNum * scale, hueBinnum * scale, CV_8UC3);
+
+			//【5】双层循环，进行直方图绘制
+			for (int hue = 0;hue < hueBinnum;hue++)
+			{
+				for (int saturation = 0;saturation < saturationBinNum;saturation++)
+				{
+					float binVal = dstHist.at<float>(hue, saturation);	//直方图直条的值
+					int intensity = cvRound(binVal * 255 / maxVal);		//强度
+
+					//正式进行绘制
+					rectangle(histImg, Point(hue * scale, saturation * scale), Point((hue + 1) * scale - 1, (saturation + 1) * scale - 1), Scalar::all(intensity), FILLED);
+				}
+			}
+			return histImg;
+		}
+		else
+		{
+			Mat hsvImage;
+			//【1】转化到HSV空间
+			cvtColor(*srcImage, hsvImage, COLOR_BGR2HSV);		//完成转化
+			//【2】参数准备
+			//将色调量化为30个等级，将饱和度量化为32个等级
+			int hueBinnum = 30;		//色调直方图的直条数量
+			int saturationBinNum = 32;//饱和度的直方图条数
+			int histSize[] = { hueBinnum,saturationBinNum };//将横坐标分为30份   纵坐标分为32份
+			//定义色调范围为0-179
+			float hueRanges[] = { 0,180 };
+			//定义饱和度变化为0-255
+			float saturationRanges[] = { 0,256 };
+			const float* ranges[] = { hueRanges,saturationRanges };
+			MatND dstHist;		//:MatND是直方图对应的数据类型,用来存储直方图.
+
+			//参数准备，calHist函数中将计算第0通道和第1通道的直方图
+			int channels[] = { 0,1 };
+
+			//【3】正式调用calcHist，进行直方图计算
+			calcHist(&hsvImage,	//输入数组
+				1,	//数组个数
+				channels,	//通道索引
+				Mat(),//不使用掩膜
+				dstHist,	//输出的目标直方图
+				2,	//需要计算的直方图的维数
+				histSize,	//存放每个维度的直方图尺寸的数组
+				ranges,		//每一维数值的取值范围
+				true,	//指示直方图是否均匀的标识符，true表示均匀的直方图
+				false);	//累计标识符，false表示直方图在配置阶段会被清零
+			normalize(dstHist, dstHist, 0, 1, NORM_MINMAX, -1, Mat());	//归一化
+			return dstHist;
+		}
+	}
+	else
+	{
+
+	}
+}
+
+int main()
+{
+	//【1】load两幅图片
+	//Mat srcImage1 = imread("D:\\opencv_picture_test\\JQ\\JQ5.jpg", 2 | 4);			//原图
+	//Mat srcImage2 = imread("D:\\opencv_picture_test\\JQ\\JQ18.jpg", 2|4);			//原图
+	Mat srcImage1 = imread("D:\\opencv_picture_test\\miku\\miku2.jpg", 2 | 4);			//原图
+	Mat srcImage2 = imread("D:\\opencv_picture_test\\miku\\miku5.jpg", 2 | 4);			//原图
+	if (srcImage1.empty() || srcImage2.empty())
+	{
+		printf("Could not find the image!\n");
+		return -1;
+	}
+	//【2】show两幅图片
+	namedWindow("素材图1", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
+	imshow("素材图1", srcImage1);
+	namedWindow("素材图2", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
+	imshow("素材图2", srcImage2);
+	//【2】计算直方图并且归一化
+	Mat histImg1, histImg2;
+	histImg1 = My_Rraw_histogram_2D(&srcImage1, TYEPE_HS2D, CAL_AND_NOMALIZE);
+	histImg2 = My_Rraw_histogram_2D(&srcImage2, TYEPE_HS2D, CAL_AND_NOMALIZE);
+
+	//利用库函数来比较
+	double src_src1 = compareHist(histImg1, histImg2, 0);
+	double src_src2 = compareHist(histImg1, histImg2, 1);
+	double src_src3 = compareHist(histImg1, histImg2, 2);
+	double src_src4 = compareHist(histImg1, histImg2, 3);
+
+	cout << "相关性 : " << src_src1 << endl;
+	cout << "卡方 : " << src_src2 << endl;
+	cout << "直方图相交 : " << src_src3 << endl;
+	cout << "巴氏距离 : " << src_src4 << endl;
+	waitKey(0);
+	return 0;
+}
 
 
 
