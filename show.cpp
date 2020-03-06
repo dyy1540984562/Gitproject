@@ -13,7 +13,7 @@ using namespace std;
 /************练习1**********************/
 //int main()
 //{
-//	Mat img1 = imread("D:\\opencv_picture_test\\miku2.jpg", 0);			//灰度图
+//	Mat img1 = imread("D:\\opencv_picture_test\\miku2.jpg",2|4);			//灰度图
 //	if (img1.empty())
 //	{
 //		printf("Could not find the image!\n");
@@ -59,7 +59,7 @@ using namespace std;
 /************练习3**********************/
 //int main()
 //{
-//	Mat displayMat = imread("D:\\opencv_picture_test\\miku2.jpg", 0);			//灰度图
+//	Mat displayMat = imread("D:\\opencv_picture_test\\RGB纯色图\\blue.jpg", 0);			//灰度图
 //	if (displayMat.empty())
 //	{
 //		printf("Could not find the image!\n");
