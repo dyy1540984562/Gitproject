@@ -1,150 +1,155 @@
 ﻿#include <opencv2/opencv.hpp>
 #include <iostream>
+#include "windows.h"
+#include <stdio.h>
 
 using namespace cv;
 using namespace std;
 #define byte uchar 
-#define TYEPE_GRAY 0
-#define TYEPE_RGB 1
-#define TYEPE_HS2D 1
-#define CAL_AND_DRAW 0
-#define CAL_AND_NOMALIZE 1
+#define WINDOW_NAME "【程序窗口】"			//为窗口标题定义的宏
 
-/************练习1**********************/
+
+//*--------------------------【练习1】利用不同的物体在HSV色彩空间上的不同色域，实现目标像素的提取-------------------------------------*/
+//*--------------------------【主函数】-------------------------------------*/
+
 //int main()
 //{
-//	Mat img1 = imread("D:\\opencv_picture_test\\miku2.jpg",2|4);			//灰度图
-//	if (img1.empty())
+//	VideoCapture cap(0);
+//	double scale = 0.5;
+//	//0-180
+//	//肤色
+//	double i_minH = 0;
+//	double i_maxH = 20;
+//	//0-255
+//	double i_minS = 1;//43
+//	double i_maxS = 255;
+//	//0-255
+//	double i_minV = 50;//55
+//	double i_maxV = 255;
+//	while(1)
 //	{
-//		printf("Could not find the image!\n");
-//		return -1;
-//	}
-//	std::vector<cv::Mat> channels;
-//	cv::split(img1,channels);
-//	Mat B = channels.at(0);
-//	Mat G = channels.at(1);
-//	Mat R = channels.at(2);
-//	imshow("blue", B);
-//	imshow("green", G);
-//	imshow("red", R);
-//	waitKey(0);
-//	return 0;
-//}
-///************练习2**********************/
-//int main()
-//{
-//	//实例化的同时初始化
-//	//调用摄像头
-//	VideoCapture capture(0);		//类似于 int a=1;
-//	/*
-//		先实例化
-//		VideoCapture capture;
-//		再初始化
-//		capture.open("D:\\opencv_picture_test\\video1.avi");
-//	*/
-//	while (1)
-//	{
-//		Mat frame;	//存储每一帧的图像
-//		capture >> frame;	//读取当前帧
-//		imshow("原视频", frame);	//显示当前帧
-//		//进行腐蚀操作
-//		Mat element = getStructuringElement(MORPH_RECT, Size(15, 15));	//返回的是内核矩阵
-//		Mat dstImage;
-//		erode(frame, dstImage, element);					//腐蚀操作
-//		imshow("处理后的视频", dstImage);	//显示当前帧
-//		if(waitKey(10) >= 0) break;	//延时10ms
+//		Mat frame;
+//		Mat hsvMat;
+//		Mat detectMat;
+//		cap >> frame;
+//		Size ResImgSiz = Size(frame.cols * scale, frame.rows * scale);
+//		Mat rFrame =Mat(ResImgSiz, frame.type());
+//		resize(frame, rFrame, ResImgSiz, INTER_LINEAR);
+//		cvtColor(rFrame, hsvMat,COLOR_BGR2HSV);
+//		rFrame.copyTo(detectMat);
+//		cv::inRange(hsvMat, Scalar(i_minH, i_minS, i_minV), Scalar(i_maxH,i_maxS, i_maxV), detectMat);
+//		imshow("whie: in the range", detectMat);
+//		imshow("frame" , rFrame );
+//		waitKey(30);
 //	}
 //	return 0;
 //}
-/************练习3**********************/
+
+
+//*--------------------------【练习2】调用两种二值化函数，实现二值化-------------------------------------*/
+
 //int main()
 //{
-//	Mat displayMat = imread("D:\\opencv_picture_test\\RGB纯色图\\blue.jpg", 0);			//灰度图
-//	if (displayMat.empty())
-//	{
-//		printf("Could not find the image!\n");
-//		return -1;
-//	}
-//	//画圆
-//	Point pt;
-//	pt.x = 90;
-//	pt.y = 90;
-//	circle(displayMat, pt, 20, CV_RGB(0, 255, 0), 1, 8, 0);
-//	//画线段
-//	Point pt1;
-//	pt1.x = 100;
-//	pt1.y = 100;
-//	Point pt2;
-//	pt2.x = 300;
-//	pt2.y = 300;
-//	line(displayMat, pt1, pt2, CV_RGB(0, 255, 0), 10, 8, 0);
-//	//画矩形框
-//	Rect rect;
-//	rect.x = 20;
-//	rect.y = 20;
-//	rect.width = 20;
-//	rect.height = 20;
-//	rectangle(displayMat, rect, CV_RGB(0, 255, 0), 1, 8, 0);
-//	imshow("图片", displayMat);
-//	waitKey(0);
-//	return 0;
+//	Mat srcImage = imread("D:\\opencv_picture_test\\阈值处理\\硬币.png", 0);	//读入的时候转化为灰度图
+//	namedWindow("原始图", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
+//	imshow("原始图", srcImage);
 //
+//	Mat dstImage1,dstImage2;
+//	dstImage1.create(srcImage.rows, srcImage.cols, CV_8UC1);
+//	dstImage2.create(srcImage.rows, srcImage.cols, CV_8UC1);
+//	double time0 = static_cast<double>(getTickCount());	//记录起始时间
+//	//阈值处理+二值化
+//	//1
+//	threshold(srcImage,dstImage1,83,255,THRESH_BINARY);
+//	adaptiveThreshold(srcImage,dstImage2,255,ADAPTIVE_THRESH_GAUSSIAN_C,THRESH_BINARY_INV,15,10);
+//	//		原图  结果图   预设满足条件的最大值		自适应阈值算法   二进制阈值或反二进制阈值   局部区域的尺寸 3 5 7      该参数和算法有关
+//	//一系列处理之后
+//	time0 = ((double)getTickCount() - time0) / getTickFrequency();
+//	cout << "此方法运行时间为：" << time0 << "秒" << endl;	//输出运行时间
+//	namedWindow("效果图1",WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
+//	imshow("效果图1", dstImage1);
+//	namedWindow("效果图2", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
+//	imshow("效果图2", dstImage2);
+//	//dstImage = My_Rraw_histogram(&srcImage);
+//	//namedWindow("一维直方图", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
+//	//imshow("一维直方图", dstImage);
+//	waitKey(0);
+//	return 0;
 //}
-///*--------------------------【练习5】绘制一维灰度直方图-------------------------------------*/
-Mat	My_Rraw_histogram(Mat* srcImage)		//输入:要处理的灰度图   输出：该图像的直方图
-{
-	//【2】定义变量
-	MatND dstHist;
-	int dims = 1;		//需要计算的直方图的维数
-	float grayranges[] = { 0,255 };
-	const float* ranges[] = { grayranges };	//这里需要为const类型
-	int size = 256;			//表示的是将统计的灰度值分成的等份
-	int channels = 0;	//灰度图只有一个0通道
 
-	//【3】计算图像直方图
-	calcHist(srcImage,	//输入数组
-		1,	//数组个数
-		&channels,	//通道索引
-		Mat(),//不使用掩膜
-		dstHist,	//输出的目标直方图
-		dims,	//需要计算的直方图的维数
-		&size,	//存放每个维度的直方图尺寸的数组
-		ranges);	//每一维数值的取值范围	
-	int scale = 1;		//scale 每一个像素占的格数
 
-	Mat dstImage(size * scale, size, CV_8U, Scalar(0));		//长 ：size*scale ，宽：size ,值为0
 
-	//【4】获取最大值和最小值
-	double minVal = 0;
-	double maxVal = 0;
-	minMaxLoc(dstHist, &minVal, &maxVal, 0, 0);		//获得直方图中最大值和最小值
+//*--------------------------【练习3】利用滑动条来调整阈值-------------------------------------*/
 
-	//【5】绘制出直方图
-	int hpt = saturate_cast<int>(0.9 * size);			//saturate_cast 是溢出保护    大概意思 ：if(data<0)  data = 0; else if (data > 255) data = 255;
-	for (int i = 0;i < 256;i++)
-	{
-		float binVal = dstHist.at<float>(i);
-		int realVal = saturate_cast<int>(binVal * hpt / maxVal);		//在图像上的高度 = 像素值/最大像素值 * 0.9*256   这里0.9是为了削减图像像素高度，因为最大的时候会触及顶端不美观
-		rectangle(dstImage, Point(i * scale, size - 1), Point((i + 1) * scale - 1, size - realVal), Scalar(255));
-		//要进行绘制的目标图像 矩形的左下顶点 矩阵对角线上的右上顶点 线条的颜色（RGB）或亮度（灰度图）  一共要绘制256个矩形
-	}
-	return dstImage;
-}
-//主函数
+/*--------------------------【全局变量声明】-------------------------------------*/
+int g_nThresholdValue = 100;
+int g_nThresholdType = 3;
+Mat g_srcImage, g_grayImage, g_dstImage;
+
+//*--------------------------【全局函数声明】-------------------------------------*/
+static void ShowHelpText();		//输出帮助文字
+void on_Threshold(int ,void*);	//回调函数
+
+//*--------------------------【主函数】-------------------------------------*/
 int main()
 {
-	//【1】载入原图
-	Mat srcImage = imread("D:\\opencv_picture_test\\新垣结衣\\test2.jpg", 0);			//原图的灰度图
-	namedWindow("灰度图", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
-	imshow("灰度图", srcImage);
-	if (srcImage.empty())
-	{
-		printf("Could not find the image!\n");
-		return -1;
-	}
-	Mat dstImage = My_Rraw_histogram(&srcImage);
-	namedWindow("一维直方图", WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
-	imshow("一维直方图", dstImage);
-	waitKey(0);
-	return 0;
+		//【1】读入原图片
+	    g_srcImage = imread("D:\\opencv_picture_test\\阈值处理\\硬币.png", 2|4);
+		if (g_srcImage.empty())
+		{
+			printf("Could not find the image!\n");
+			return -1;
+		}
+		//【2】存留原图的灰度图
+		cvtColor(g_srcImage, g_grayImage, COLOR_RGB2GRAY);
+		namedWindow(WINDOW_NAME, WINDOW_NORMAL);//WINDOW_NORMAL允许用户自由伸缩窗口
+		//【3】创建窗口 并 显示原图
+		imshow("原始图", g_srcImage);
+		//【4】创建滑动条来控制阈值
+		createTrackbar("模式",WINDOW_NAME,&g_nThresholdType,4,on_Threshold);
+		createTrackbar("参数值", WINDOW_NAME, &g_nThresholdValue,255, on_Threshold);
+		//【5】初始化自定义的阈值回调函数
+		on_Threshold(0,0);
+		//【6】输出一些帮助信息
+		ShowHelpText();
+		//【7】轮询等待用户按键，如果ESC键按下则退出程序
+		while (1)
+		{
+			if (waitKey(10) == 27) break;		//按下Esc 退出
+		}
+		//imwrite("D:\\opencv_picture_test\\阈值处理\\硬币二值化.jpg", g_dstImage);
+		return 0;
 }
+
+//*--------------------------【on_Threshold 函数】-------------------------------------*/
+void on_Threshold(int, void*)
+{
+	//调用阈值函数
+	threshold(g_grayImage, g_dstImage, g_nThresholdValue, 255, g_nThresholdType);
+	//其它参数很好理解，我们来看看第五个参数，第五参数有以下几种类型
+	//	0: THRESH_BINARY  当前点值大于阈值时，取Maxval, 也就是第四个参数，下面再不说明，否则设置为0
+	//	1 : THRESH_BINARY_INV 当前点值大于阈值时，设置为0，否则设置为Maxval
+	//	2 : THRESH_TRUNC 当前点值大于阈值时，设置为阈值，否则不改变
+	//	3 : THRESH_TOZERO 当前点值大于阈值时，不改变，否则设置为0
+	//	4 : THRESH_TOZERO_INV  当前点值大于阈值时，设置为0，否则不改变
+	//更新效果图
+	imshow(WINDOW_NAME,g_dstImage);
+}
+
+//-----------------------------------【ShowHelpText( )函数】-----------------------------
+//          描述：输出一些帮助信息
+//----------------------------------------------------------------------------------------------
+void ShowHelpText()
+{
+	//输出一些帮助信息
+	printf("\n\n\n\tg_nThresholdType 参数有以下几种类型\n");
+	printf("\n\n\t0: THRESH_BINARY  当前点值大于阈值时，取Maxval, 也就是第四个参数，下面再不说明，否则设置为0\n");
+	printf("\n\n\t1 : THRESH_BINARY_INV 当前点值大于阈值时，设置为0，否则设置为Maxval\n");
+	printf("\n\n\t2 : THRESH_TRUNC 当前点值大于阈值时，设置为阈值，否则不改变\n");
+	printf("\n\n\t3 : THRESH_TOZERO 当前点值大于阈值时，不改变，否则设置为0\n");
+	printf("\n\n\t4 : THRESH_TOZERO_INV  当前点值大于阈值时，设置为0，否则不改变\n");
+	printf("\n\n\t按下esc 退出循环\n");
+}
+
+
+
