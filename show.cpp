@@ -522,3 +522,58 @@ void main_of_diferent_Threshold_types()
 //	imshow("dst", dstMat);
 //	waitKey(0);
 //}
+
+
+////*--------------------------【练习4】-------------------------------------*/
+
+int main()
+{
+	Mat lableMat;
+	Mat statsMat;
+	Mat centerMat;
+	Mat srcMat = imread("D:\\opencv_picture_test\\形态学操作\\clip.png", 0);			//读取灰度
+	Mat dstMat;
+	//调用阈值函数
+	threshold(srcMat, dstMat, 84, 255,THRESH_BINARY_INV);
+	//腐蚀操作
+	/*Mat element = getStructuringElement(MORPH_ELLIPSE, Size(9,9));		
+	morphologyEx(dstMat,dstMat, MORPH_ERODE, element);*/	
+	int nComp = cv::connectedComponentsWithStats(dstMat,
+		lableMat,
+		statsMat,
+		centerMat,
+		8,
+		CV_32S);
+
+	for (int i = 1; i < nComp; i++)
+	{
+		cout << "pixels = " << statsMat.at<int>(i, 4) << endl;
+		cout << "width = " << statsMat.at<int>(i, 2) << endl;
+		cout << "height = " << statsMat.at<int>(i, 3) << endl;
+		cout << endl;
+	}
+
+	for (int i = 1; i < nComp; i++)
+	{
+		Rect bndbox;
+		bndbox.x = statsMat.at<int>(i, 0);
+		bndbox.y = statsMat.at<int>(i, 1);
+		bndbox.width = statsMat.at<int>(i, 2);
+		bndbox.height = statsMat.at<int>(i, 3);
+		rectangle(dstMat, bndbox, CV_RGB(255, 255, 255), 1, 8, 0);
+	}
+	nComp--;	//减去背景
+	cout << "初步回形针数目：" << nComp-1 << endl;
+	for (int i = 1; i < nComp; i++)
+	{
+		if (statsMat.at<int>(i, 4) <= 200)
+		{
+			nComp--;
+		}
+	}
+	//减去像素小的
+	cout << "最终回形针数目：" << nComp - 1 << endl;
+	imshow("src", srcMat);
+	imshow("dst", dstMat);
+	waitKey(0);
+}
