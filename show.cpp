@@ -521,4 +521,4 @@ void main_of_diferent_Threshold_types()
 //	imshow("src", srcMat);
 //	imshow("dst", dstMat);
 //	waitKey(0);
-//
+//}
