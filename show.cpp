@@ -562,11 +562,10 @@ int main()
 		bndbox.height = statsMat.at<int>(i, 3);
 		rectangle(dstMat, bndbox, CV_RGB(255, 255, 255), 1, 8, 0);
 	}
-	nComp--;	//减去背景
 	cout << "初步回形针数目：" << nComp-1 << endl;
 	for (int i = 1; i < nComp; i++)
 	{
-		if (statsMat.at<int>(i, 4) <= 200)
+		if ((statsMat.at<int>(i, 4) <= 5000))
 		{
 			nComp--;
 		}
