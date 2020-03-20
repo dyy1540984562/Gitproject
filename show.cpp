@@ -7,7 +7,7 @@ using namespace cv;
 using namespace std;
 #define byte uchar 
 #define WINDOW_NAME "【程序窗口】"			//为窗口标题定义的宏
-
+/**************************无关精要的函数**************************************/
 Mat	My_Rraw_histogram(Mat* srcImage)		//输入:要处理的灰度图   输出：该图像的直方图
 {
 	//【2】定义变量
@@ -479,8 +479,8 @@ void main_of_diferent_Threshold_types()
 //	imshow("dst", dstMat);
 //	waitKey(0);
 //}
+
 ////*--------------------------【练习3】-------------------------------------*/
-///*--------------------------【练习3】-------------------------------------*/
 
 //int main()
 //{
@@ -521,4 +521,4 @@ void main_of_diferent_Threshold_types()
 //	imshow("src", srcMat);
 //	imshow("dst", dstMat);
 //	waitKey(0);
-//}
+//
