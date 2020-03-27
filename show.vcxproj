@@ -159,6 +159,9 @@
   <ItemGroup>
     <ClCompile Include="show.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="My_ImageProssing_base.h" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
