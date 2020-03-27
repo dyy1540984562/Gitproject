@@ -96,6 +96,8 @@ using namespace std;
 
 //练习5 利用Opencv自带的分类器检测人脸并对ROI区域进行部分处理
 
+
+
 //训练文件路径
 string xmlPath = "D:\\opencv\\opencv4.0\\opencv4.0.0\\build\\etc\\haarcascades\\haarcascade_frontalface_alt2.xml";
 //打马赛克函数
