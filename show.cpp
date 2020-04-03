@@ -257,100 +257,100 @@ using namespace std;
 
 //====================================练习6:图像矫正加剪切（待完成）=====================================
 
-//int main()
-//{
-//	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY | FOREGROUND_GREEN);		//字体为绿色
-//	//定义Mat变量（变换矩阵）
-//	Mat srcMat, dstMat;
-//	//原图，仿射变换后的图，旋转变换后的图
-//	srcMat = imread("D:\\opencv_picture_test\\lena_rot.jpg");	//读取灰度图
-//	//判断图像是否加载成功
-//	if (srcMat.empty())
-//	{
-//		cout << "图像加载失败!" << endl;
-//		return -1;
-//	}
-//	else
-//		cout << "图像加载成功!" << endl << endl;
-//	//遍历找四个点
-//	Point2f one;
-//	Point2f two;
-//	Point2f three;
-//	Point2f four;
-//	//第一行
-//	for (int i = 0;i < srcMat.cols;i++)
-//	{
-//		int temp = (srcMat.at<Vec3b>(0, i)[0] + srcMat.at<Vec3b>(0, i)[1] + srcMat.at<Vec3b>(0, i)[2]) / 3;
-//		if (temp <= 250)
-//		{
-//			one.x = 0;
-//			one.y = i;
-//			break;
-//		}
-//	}
-//	//最后一行
-//	for (int i = 0;i < srcMat.cols;i++)
-//	{
-//		int temp = (srcMat.at<Vec3b>(srcMat.rows - 1, i)[0] + srcMat.at<Vec3b>(srcMat.rows - 1, i)[1] + srcMat.at<Vec3b>(srcMat.rows - 1, i)[2]) / 3;
-//		if (temp <= 250)
-//		{
-//			four.x = srcMat.rows - 1;
-//			four.y = i;
-//			break;
-//		}
-//	}
-//	//第一列
-//	for (int i = 0;i < srcMat.rows;i++)
-//	{
-//		int temp = (srcMat.at<Vec3b>(i,0)[0] + srcMat.at<Vec3b>(i, 0)[1] + srcMat.at<Vec3b>(i, 0)[2]) / 3;
-//		if (temp <= 250)
-//		{
-//			three.x = i;
-//			three.y = 0;
-//			break;
-//		}
-//	}
-//	//最后一列
-//	for (int i = 0;i < srcMat.rows;i++)
-//	{
-//		int temp = (srcMat.at<Vec3b>(i, srcMat.cols-1)[0] + srcMat.at<Vec3b>(i, srcMat.cols - 1)[1] + srcMat.at<Vec3b>(i, srcMat.cols - 1)[2]) / 3;
-//		if (temp <= 250)
-//		{
-//			two.x = i;
-//			two.y = srcMat.cols-1;
-//			break;
-//		}
-//	}
-//	//变换前的点坐标
-//	const cv::Point2f src_pt[] = {
-//						//one,
-//						//two,
-//						//three,
-//						//four
-//						Point2f(one.y,one.x),
-//						Point2f(two.y,two.x),
-//						Point2f(three.y,three.x),
-//						Point2f(four.y,four.x)
-//	};
-//	//计算变换后的MAT长度
-//	int chandu = sqrt((srcMat.cols - 1 - one.y)* (srcMat.cols - 1 - one.y) + (two.x)* (two.x));
-//
-//	//变换后的点坐标
-//	const cv::Point2f dst_pt[] = {
-//						cv::Point2f(0,0),
-//						/*cv::Point2f(0,srcMat.cols - 1),
-//						cv::Point2f(srcMat.rows - 1,0),
-//						cv::Point2f(srcMat.rows - 1,srcMat.cols - 1)*/
-//						cv::Point2f(srcMat.cols - 1,0),
-//						cv::Point2f(0,srcMat.rows - 1),
-//						cv::Point2f(srcMat.cols - 1,srcMat.rows - 1)
-//	};
-//
-//	//计算仿射矩阵
-//	Mat perspective_matrix = getPerspectiveTransform(src_pt, dst_pt);
-//	warpPerspective(srcMat, dstMat, perspective_matrix, srcMat.size());
-//	imshow(" src ", srcMat);
-//	imshow(" dst", dstMat);
-//	waitKey(0);
-//	return 0;
-//}
+int main()
+{
+	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY | FOREGROUND_GREEN);		//字体为绿色
+	//定义Mat变量（变换矩阵）
+	Mat srcMat, dstMat;
+	//原图，仿射变换后的图，旋转变换后的图
+	srcMat = imread("D:\\opencv_picture_test\\lena_rot.jpg");	//读取灰度图
+	//判断图像是否加载成功
+	if (srcMat.empty())
+	{
+		cout << "图像加载失败!" << endl;
+		return -1;
+	}
+	else
+		cout << "图像加载成功!" << endl << endl;
+	//遍历找四个点
+	Point2f one;
+	Point2f two;
+	Point2f three;
+	Point2f four;
+	//第一行
+	for (int i = 0;i < srcMat.cols;i++)
+	{
+		int temp = (srcMat.at<Vec3b>(0, i)[0] + srcMat.at<Vec3b>(0, i)[1] + srcMat.at<Vec3b>(0, i)[2]) / 3;
+		if (temp <= 250)
+		{
+			one.x = 0;
+			one.y = i;
+			break;
+		}
+	}
+	//最后一行
+	for (int i = 0;i < srcMat.cols;i++)
+	{
+		int temp = (srcMat.at<Vec3b>(srcMat.rows - 1, i)[0] + srcMat.at<Vec3b>(srcMat.rows - 1, i)[1] + srcMat.at<Vec3b>(srcMat.rows - 1, i)[2]) / 3;
+		if (temp <= 250)
+		{
+			four.x = srcMat.rows - 1;
+			four.y = i;
+			break;
+		}
+	}
+	//第一列
+	for (int i = 0;i < srcMat.rows;i++)
+	{
+		int temp = (srcMat.at<Vec3b>(i,0)[0] + srcMat.at<Vec3b>(i, 0)[1] + srcMat.at<Vec3b>(i, 0)[2]) / 3;
+		if (temp <= 250)
+		{
+			three.x = i;
+			three.y = 0;
+			break;
+		}
+	}
+	//最后一列
+	for (int i = 0;i < srcMat.rows;i++)
+	{
+		int temp = (srcMat.at<Vec3b>(i, srcMat.cols-1)[0] + srcMat.at<Vec3b>(i, srcMat.cols - 1)[1] + srcMat.at<Vec3b>(i, srcMat.cols - 1)[2]) / 3;
+		if (temp <= 250)
+		{
+			two.x = i;
+			two.y = srcMat.cols-1;
+			break;
+		}
+	}
+	//变换前的点坐标
+	const cv::Point2f src_pt[] = {
+						//one,
+						//two,
+						//three,
+						//four
+						Point2f(one.y,one.x),
+						Point2f(two.y,two.x),
+						Point2f(three.y,three.x),
+						Point2f(four.y,four.x)
+	};
+	//计算变换后的MAT长度
+	int chandu = sqrt((srcMat.cols - 1 - one.y)* (srcMat.cols - 1 - one.y) + (two.x)* (two.x));
+
+	//变换后的点坐标
+	const cv::Point2f dst_pt[] = {
+						cv::Point2f(0,0),
+						/*cv::Point2f(0,srcMat.cols - 1),
+						cv::Point2f(srcMat.rows - 1,0),
+						cv::Point2f(srcMat.rows - 1,srcMat.cols - 1)*/
+						cv::Point2f(srcMat.cols - 1,0),
+						cv::Point2f(0,srcMat.rows - 1),
+						cv::Point2f(srcMat.cols - 1,srcMat.rows - 1)
+	};
+
+	//计算仿射矩阵
+	Mat perspective_matrix = getPerspectiveTransform(src_pt, dst_pt);
+	warpPerspective(srcMat, dstMat, perspective_matrix, srcMat.size());
+	imshow(" src ", srcMat);
+	imshow(" dst", dstMat);
+	waitKey(0);
+	return 0;
+}
