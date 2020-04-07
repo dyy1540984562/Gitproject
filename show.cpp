@@ -260,97 +260,38 @@ using namespace std;
 int main()
 {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_INTENSITY | FOREGROUND_GREEN);		//字体为绿色
+	//【1】参数准备
+	//定义两组点，代表两个三角形
+	Point2f srcTriangle[3];
+	Point2f dstTriangle[3];
 	//定义Mat变量（变换矩阵）
-	Mat srcMat, dstMat;
+	Mat rotMat(2, 3, CV_32FC1);	//CV_32FC1代表一个32位浮点型单通道
+	Mat srcImage, dstImage_roate;
 	//原图，仿射变换后的图，旋转变换后的图
-	srcMat = imread("D:\\opencv_picture_test\\lena_rot.jpg");	//读取灰度图
+	srcImage = imread("D:\\opencv_picture_test\\lena.jpg");	//读取灰度图
 	//判断图像是否加载成功
-	if (srcMat.empty())
+	if (srcImage.empty())
 	{
 		cout << "图像加载失败!" << endl;
 		return -1;
 	}
 	else
 		cout << "图像加载成功!" << endl << endl;
-	//遍历找四个点
-	Point2f one;
-	Point2f two;
-	Point2f three;
-	Point2f four;
-	//第一行
-	for (int i = 0;i < srcMat.cols;i++)
-	{
-		int temp = (srcMat.at<Vec3b>(0, i)[0] + srcMat.at<Vec3b>(0, i)[1] + srcMat.at<Vec3b>(0, i)[2]) / 3;
-		if (temp <= 250)
-		{
-			one.x = 0;
-			one.y = i;
-			break;
-		}
-	}
-	//最后一行
-	for (int i = 0;i < srcMat.cols;i++)
-	{
-		int temp = (srcMat.at<Vec3b>(srcMat.rows - 1, i)[0] + srcMat.at<Vec3b>(srcMat.rows - 1, i)[1] + srcMat.at<Vec3b>(srcMat.rows - 1, i)[2]) / 3;
-		if (temp <= 250)
-		{
-			four.x = srcMat.rows - 1;
-			four.y = i;
-			break;
-		}
-	}
-	//第一列
-	for (int i = 0;i < srcMat.rows;i++)
-	{
-		int temp = (srcMat.at<Vec3b>(i,0)[0] + srcMat.at<Vec3b>(i, 0)[1] + srcMat.at<Vec3b>(i, 0)[2]) / 3;
-		if (temp <= 250)
-		{
-			three.x = i;
-			three.y = 0;
-			break;
-		}
-	}
-	//最后一列
-	for (int i = 0;i < srcMat.rows;i++)
-	{
-		int temp = (srcMat.at<Vec3b>(i, srcMat.cols-1)[0] + srcMat.at<Vec3b>(i, srcMat.cols - 1)[1] + srcMat.at<Vec3b>(i, srcMat.cols - 1)[2]) / 3;
-		if (temp <= 250)
-		{
-			two.x = i;
-			two.y = srcMat.cols-1;
-			break;
-		}
-	}
-	//变换前的点坐标
-	const cv::Point2f src_pt[] = {
-						//one,
-						//two,
-						//three,
-						//four
-						Point2f(one.y,one.x),
-						Point2f(two.y,two.x),
-						Point2f(three.y,three.x),
-						Point2f(four.y,four.x)
-	};
-	//计算变换后的MAT长度
-	int chandu = sqrt((srcMat.cols - 1 - one.y)* (srcMat.cols - 1 - one.y) + (two.x)* (two.x));
-
-	//变换后的点坐标
-	const cv::Point2f dst_pt[] = {
-						cv::Point2f(0,0),
-						/*cv::Point2f(0,srcMat.cols - 1),
-						cv::Point2f(srcMat.rows - 1,0),
-						cv::Point2f(srcMat.rows - 1,srcMat.cols - 1)*/
-						cv::Point2f(srcMat.cols - 1,0),
-						cv::Point2f(0,srcMat.rows - 1),
-						cv::Point2f(srcMat.cols - 1,srcMat.rows - 1)
-	};
-
-	//计算仿射矩阵
-	Mat perspective_matrix = getPerspectiveTransform(src_pt, dst_pt);
-	warpPerspective(srcMat, dstMat, perspective_matrix, srcMat.size());
-	imshow(" src ", srcMat);
-	imshow(" dst", dstMat);
+	//【5】获取旋转信息
+	Point center = Point(srcImage.cols / 2, srcImage.rows / 2);	//中心点
+	double angle = -30.0;			//顺时针30度
+	double scale = 1;
+	//【6】通过上面的旋转细节信息求得旋转矩阵
+	rotMat = getRotationMatrix2D(center, angle, scale);
+	//【7】对缩放后的图像进行旋转
+	//计算边长
+	int width = (abs(sin(angle))+abs(cos(angle)))* srcImage.cols;
+	warpAffine(srcImage, dstImage_roate, rotMat,Size(width, width));
+	//【8】显示结果
+	namedWindow("原图像", WINDOW_NORMAL);     //定义窗口显示属性
+	imshow("原图像", srcImage);
+	imshow("缩放旋转图", dstImage_roate);
+	//创建三个窗口
 	waitKey(0);
 	return 0;
 }
