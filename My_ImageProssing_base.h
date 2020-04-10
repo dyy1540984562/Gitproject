@@ -27,6 +27,7 @@ class My_ImageProssing_base
 My_ImageProssing_base My;	//实例化
 
 
+
 Mat My_ImageProssing_base::My_Rraw_histogram(Mat* srcImage)		//输入:要处理的灰度图   输出：该图像的直方图
 {
 	//【2】定义变量
