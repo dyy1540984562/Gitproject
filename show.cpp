@@ -105,4 +105,5 @@ int main()
 	imshow("topic1", srcMat);
 	waitKey(0);
 	return 0;
+
 }
