@@ -166,3 +166,4 @@ int main()
 	delete[] ref_hist_img2;
 	return 0;
 }
+
