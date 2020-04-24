@@ -15,6 +15,7 @@ RNG g_rng(12345);
 Mat src_image;
 Mat img1;
 Mat img2;
+
 //*--------------------------手动实现HOG描述子-------------------------------------*/
 int angle_lianghua(float angle)
 {
