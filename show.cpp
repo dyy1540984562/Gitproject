@@ -130,8 +130,8 @@ int main()
 
 	int cnt = 0;
 	cv::Mat frame;
-	cv::Mat meanMat;
-	cv::Mat varMat;
+	cv::Mat meanMat;		//用于存储平均值
+	cv::Mat varMat;			//用于存储方差
 	cv::Mat dstMat;
 
 	while (true)
@@ -157,16 +157,14 @@ int main()
 			calcGaussianBackground(srcMats, meanMat, varMat);
 		}
 		else {
-			//背景差分
 			dstMat.create(frame.size(), CV_8UC1);
-			gaussianThreshold(frame, meanMat, varMat, wVar, dstMat);
+			//背景差分并且将差分后的结果二值化
+			gaussianThreshold(frame, meanMat, varMat, wVar, dstMat);		
 			imshow("result", dstMat);
 			imshow("frame", frame);
 			waitKey(30);
 		}
-
 		cnt++;
-
 	}
 
 	return 0;
