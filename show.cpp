@@ -13,6 +13,7 @@ using namespace cv;
 using namespace std;
 RNG g_rng(12345);
 
+
 //识别并标出火焰
 //输入 原图像 输出：原图像上框出框框（火）
 void find_fire(Mat& srcMat, Mat& outputMat)
