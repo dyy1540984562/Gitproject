@@ -16,20 +16,6 @@ using namespace cv;
 using namespace std;
 RNG g_rng(12345);
 
-
-
-VideoCapture createInput(bool useCamera, std::string videoPath)
-{
-	//选择输入
-	VideoCapture capVideo;
-	if (useCamera) {
-		capVideo.open(0);
-	}
-	else {
-		capVideo.open(videoPath);
-	}
-	return capVideo;
-}
 int kMeansDemo()
 {
 	const int MAX_CLUSTERS = 5;
@@ -97,6 +83,7 @@ int kMeansDemo()
 	return 0;
 }
 
+//增加了两类的限制！！！！
 int createMaskByKmeans(cv::Mat src, cv::Mat& mask)
 {
 	if ((mask.type() != CV_8UC1)
@@ -130,6 +117,10 @@ int createMaskByKmeans(cv::Mat src, cv::Mat& mask)
 		}
 	}
 
+	if (mask.at<uchar>(0, 0) == 255)
+	{//反转整个图像黑白
+		mask = 255 - mask;
+	}
 	return 0;
 }
 
@@ -147,14 +138,57 @@ void segColor()
 	waitKey(0);
 
 }
-
-
-int main()
+void seg_changed(Mat& src,Mat& mask)
 {
-	//kMeansDemo();
-	segColor();
+	createMaskByKmeans(src, mask);
+	imshow("src", src);
+	imshow("mask", mask);
 }
 
+
+//int main()
+//{
+//	segColor();
+//}
+int main()
+{
+	VideoCapture capture1("D:\\opencv_picture_test\\videos\\绿布飞龙.avi");
+	VideoCapture capture2("D:\\opencv_picture_test\\videos\\十五秒恐怖视频.avi");
+	Mat frame1;
+	Mat frame2;
+	Mat reslut1;
+	Mat reslut2;
+	while (1)
+	{
+		capture1 >> frame1;	//读取当前帧
+		capture2 >> frame2;	//读取当前帧
+		Mat mask = Mat::zeros(frame1.size(), CV_8UC1);
+		reslut1  = frame1.clone();
+		reslut2 = frame2.clone();
+		seg_changed(frame1, mask);
+		//把mask大小做调整,和背景一样大小
+		resize(mask, mask, frame2.size());
+		resize(frame1, frame1, frame2.size());
+		//在原图上显示出龙
+		for (int i = 0;i < frame2.rows;i++)	//行循环
+		{
+			for (int j =0;j < frame2.cols;j++)	//列循环
+			{
+				//-------【开始处理每个像素】---------------
+				if ((mask.at<uchar>(i, j) == 255))	//白色，前景
+				{
+					reslut2.at<Vec3b>(i, j)[0] = frame1.at<Vec3b>(i, j)[0];
+					reslut2.at<Vec3b>(i, j)[1] = frame1.at<Vec3b>(i, j)[1];
+					reslut2.at<Vec3b>(i, j)[2] = frame1.at<Vec3b>(i, j)[2];
+				}
+				//-------【处理结束】---------------
+			}
+		}
+		imshow("reslut", reslut2);
+		waitKey(10);	//延时30ms
+	}
+	return 0;
+}
 
 
 
